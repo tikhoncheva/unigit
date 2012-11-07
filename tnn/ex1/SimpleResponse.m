@@ -1,4 +1,4 @@
-classdef SimpleResponse < ResponseInterface
+classdef SimpleResponse < handle %ResponseInterface
 	%SIMPLERESPONSE Summary of this class goes here
 	%   Detailed explanation goes here
 	

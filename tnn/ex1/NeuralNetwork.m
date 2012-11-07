@@ -1,6 +1,8 @@
 classdef NeuralNetwork < handle
-	%NEURONNET Summary of this class goes here
-	%   Detailed explanation goes here
+	%NEURALNETWORK simulate a neural network
+	% @Author Markus Döring
+	% @Author Thomas Reckow
+	%
 	
 	properties %(Access = private)
 		% number of neurons
@@ -36,8 +38,10 @@ classdef NeuralNetwork < handle
 	
 	methods
 		
+		
+		
 		function obj = NeuralNetwork()
-			obj.setupSimple();
+% 			obj.setupSimple();
 		end %NeuralNetwork
 		
 		function setupSimple(obj)
@@ -59,10 +63,32 @@ classdef NeuralNetwork < handle
 			obj.selfCheck();
 		end %setupSimple
 		
+		function setupReset(obj)
+		% prepare a simple working example
+			obj.n = 1;
+			obj.neuron = ResetNeuron();
+			
+			obj.k = 1;
+			obj.C = 0;
+			obj.D = 0;
+			obj.dt = .001;
+			obj.U = 1;
+			
+			obj.u0 = 0;
+
+			obj.threshold = SimpleThreshold();
+			obj.response = SimpleResponse();
+			
+			obj.selfCheck();
+		end %setupReset
+		
+		
 		function selfCheck(obj)
 		% check validity of properties
-			assert(isa(obj.threshold, 'ThresholdInterface'));
-			assert(isa(obj.response, 'ResponseInterface'));
+		
+			% simplified, no interfaces 
+% 			assert(isa(obj.threshold, 'ThresholdInterface'));
+% 			assert(isa(obj.response, 'ResponseInterface'));
 			
 			assert(numel(obj.neuron) == obj.n);
 			assert(numel(obj.u0) == obj.n);
@@ -112,9 +138,11 @@ classdef NeuralNetwork < handle
 				end
 				
 				% check for spikes at i
+				hasspike = false(obj.n,1);
 				for j=1:obj.n
 					if thresh(j,i) <= u(j,i)
 						spike{j}(end+1) = t(i);
+						hasspike(j) = true;
 					end
 				end
 				
@@ -126,7 +154,11 @@ classdef NeuralNetwork < handle
 							%TODO
 						end
 						s = obj.dt / obj.neuron(j).tau;
-						u(j,i+1) = (1-s) * u(j,i) + s*A + s*obj.neuron(j).input(t(i));
+						if hasspike(j) && isa(obj.neuron(j), 'ResetNeuron')
+							u(j,i+1) = 0;
+						else
+							u(j,i+1) = (1-s) * u(j,i) + s*A + s*obj.neuron(j).input(t(i));
+						end
 					end
 				end
 				
