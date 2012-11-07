@@ -1,4 +1,4 @@
-classdef SimpleThreshold < ThresholdInterface
+classdef SimpleThreshold < handle %ThresholdInterface
 	%SIMPLETHRESHOLD Summary of this class goes here
 	%   Detailed explanation goes here
 	
