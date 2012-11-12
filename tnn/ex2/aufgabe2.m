@@ -1,4 +1,7 @@
-function [] = aufgabe2()
+% das ist ein skript, keine funktion (aufruf trotzdem mit "aufgabe2"
+% möglich)
+%function [] = aufgabe2()
+
 clc
 clear all
 close all
@@ -11,81 +14,85 @@ thetaABS = 1000;
 rho             = deltaT / tau;
 AnzGesSchritte  = 10000;
 GesZeit         = AnzGesSchritte*deltaT;
-count           = 0;
+zeit = linspace(0,GesZeit,AnzGesSchritte+1);
+
 RefZeitSchritte = 20;
-anzahl_neuronen = 1;
-input_range = [8:1:20];
+anzahl_neuronen = 10;
+dX = 1;
+input_range = 8:dX:20;
+anzahl_spikes = zeros(input_range,1);
 
-%Variablen, die geaendert werden muessen
-input = zeros(anzahl_neuronen, size(input_range,2));
-output = zeros(anzahl_neuronen, size(input_range,2));
-letzter_spike = 0;
+col = lines;
+coli = 1;
+leg = {};
 
-u = zeros(anzahl_neuronen,AnzGesSchritte); % Init Membranpotential
-y = zeros(anzahl_neuronen,AnzGesSchritte); % Init Axonales Potential
-theta = thetaREST * ones(anzahl_neuronen,AnzGesSchritte); % Init Schwellenpotential
+auserwaehlt = 8:3:20;
 
+
+% schleife über die verschiedenen inputs 
 for k = 1:size(input_range,2)
-    for j = 1:anzahl_neuronen
-        input(j,k) = 12*rand+8;
-        u(j,k) = 10*rand;
-    end
+	
+	% Berechne die Eingabe für diesen Eingabewert
+	x = input_range(k) + 4*rand(anzahl_neuronen,AnzGesSchritte) - 2;
+	
+	% haben ein Anfangspotential und dann nach jedem Schritt ein neues, daher die +1
+	u = zeros(anzahl_neuronen,AnzGesSchritte + 1); % Init Membranpotential
+	% dendritische potentiale: startwerte
+	u(:,1) = rand(anzahl_neuronen,1)*10;
+	y = zeros(anzahl_neuronen,AnzGesSchritte + 1); % Init Axonales Potential
+	theta = thetaREST * ones(anzahl_neuronen,AnzGesSchritte+1); % Init Schwellenpotential
+
+	
+	%Variablen, die geaendert werden muessen
+	letzter_spike = NaN(anzahl_neuronen,1);
+	
+	for step = 1:AnzGesSchritte
+		% schleife über die neuronen im NN
+		for neuron = 1:anzahl_neuronen
+			
+			% prüfe wie die schwelle liegt
+			if step - letzter_spike(neuron) <= 20 % ist false wenn NaN vorkommt
+				theta(neuron,step) = thetaABS;
+			elseif ~isnan(letzter_spike(neuron))
+				theta(neuron,step) = 100/(step - letzter_spike(neuron) -10) + 10;
+			end
+			
+			% prüfe ob spike auftritt
+			if  u(neuron,step) >= theta(neuron,step)
+				y(neuron,step) = 1;
+% 				[theta, letzter_spike]   = set_theta(theta,t+1,RefZeitSchritte, ...
+% 					thetaREST, thetaABS, j, letzter_spike);
+				letzter_spike(neuron) = step;
+			end
+			
+			% update dendritisches potential
+			u(neuron,step+1) = (1.0-rho)*u(neuron,step) + rho*x(neuron,step);
+			
+		end
+	end
+	
+	anzahl_spikes(k) = nnz(y);
+	
+	if any(input_range(k)==auserwaehlt)
+		spike = any(y>0,1);
+		if ~any(spike)
+			fprintf(1, 'No spikes at x=%d\n', input_range(k));
+		else
+			hold on
+			plot(zeit(spike), sum(y(:,spike),1), '.', 'Color', col(coli, :))
+			leg{coli} = sprintf('x = %d', input_range(k));
+			coli = coli+1;
+		end
+	end
 end
 
+legend(leg, 'Location', 'SE')
+xlabel('time')
+ylabel('# spikes');
+title(sprintf('%d neurons spiking', anzahl_neuronen));
 
-for j = 1:anzahl_neuronen
-    for x = input(j,:) 
+figure;
+plot(input_range, anzahl_spikes/(GesZeit*anzahl_neuronen), 'rx')
+xlabel('x')
+ylabel('spikes per time unit per neuron');
 
-        for t = 2:AnzGesSchritte
-            u(j,t) = (1.0-rho)*u(j,t-1) + rho*(x + (4*randn-2));
-            if  u(j,t) >= theta(j,t)
-                y(j,t) = 1;
-                [theta, letzter_spike]   = set_theta(theta,t+1,RefZeitSchritte, ...
-                                   thetaREST, thetaABS, j, letzter_spike);
-            end
-        end 
-
-        count = count + 1;
-        output(j,count) = sum(y(j,:))/GesZeit;
-    
-    end
-    
-end
-for i = 8000:length(y)
-    graph(i-7999) = y(i);
-end
- 
-    figure(1);
-    plot(graph,'+');
-
-
-
-end
-
-
-function [theta, letzter_spike]  = set_theta(theta, zeit, RefZeitSchritte,  ...
-                            thetaREST, thetaABS, neuron, letzter_spike)
-z = zeit;
-v = thetaREST;
-%RefZeitSchritte = 20, also ist 20 Schritte lang theta = thetaABS
-
-    while  z < zeit + RefZeitSchritte && z <= size(theta,2)
-        theta(neuron,z) = thetaABS;
-        z = z + 1;
-    end
-    
-    while  v >= thetaREST && z <= size(theta,2)
-        letzter_spike = zeit - letzter_spike;
-        z    = z + 1;
-        if(letzter_spike ~= 10)
-            v    = 100 / (letzter_spike-10);
-        end
-        if(v < 0)
-            v    = 0;
-        end
-        
-        theta(neuron,z) =  v;
-    end
-    
-    letzter_spike = zeit;
-end
