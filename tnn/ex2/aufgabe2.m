@@ -3,7 +3,7 @@
 %function [] = aufgabe2()
 
 clc
-clear all
+% clear all
 close all
 
 %Initialisierung der Variablen
@@ -17,20 +17,21 @@ GesZeit         = AnzGesSchritte*deltaT;
 zeit = linspace(0,GesZeit,AnzGesSchritte+1);
 
 RefZeitSchritte = 20;
-anzahl_neuronen = 10;
+anzahl_neuronen = 100;
 dX = 1;
 input_range = 8:dX:20;
-anzahl_spikes = zeros(input_range,1);
+anzahl_spikes = zeros(length(input_range),1);
 
 col = lines;
-coli = 1;
-leg = {};
+coli = 0;
+leg = cell(length(input_range),1);
 
 auserwaehlt = 8:3:20;
 
+Y = zeros(anzahl_neuronen,AnzGesSchritte + 1, length(input_range));
 
 % schleife über die verschiedenen inputs 
-for k = 1:size(input_range,2)
+for k = 1:length(input_range)
 	
 	% Berechne die Eingabe für diesen Eingabewert
 	x = input_range(k) + 4*rand(anzahl_neuronen,AnzGesSchritte) - 2;
@@ -74,21 +75,17 @@ for k = 1:size(input_range,2)
 	anzahl_spikes(k) = nnz(y);
 	
 	if any(input_range(k)==auserwaehlt)
-		spike = any(y>0,1);
-		if ~any(spike)
-			fprintf(1, 'No spikes at x=%d\n', input_range(k));
-		else
-			hold on
-			plot(zeit(spike), sum(y(:,spike),1), '.', 'Color', col(coli, :))
-			leg{coli} = sprintf('x = %d', input_range(k));
-			coli = coli+1;
-		end
+		coli = coli+1;
+		Y(:,:,coli) = y;
+		leg{coli} = sprintf('x = %d', input_range(k));
 	end
 end
-
+Y = Y(:,:,1:coli);
+leg = leg(1:coli);
+plotneuron(zeit, Y);
 legend(leg, 'Location', 'SE')
 xlabel('time')
-ylabel('# spikes');
+ylabel('mean number of spikes per \delta t');
 title(sprintf('%d neurons spiking', anzahl_neuronen));
 
 figure;
