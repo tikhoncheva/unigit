@@ -18,7 +18,7 @@ dX = 1;
 input_range = 8:dX:20;
 mittleres_potential = zeros(size(input_range));
 
-cin_range = 0:.1:2;
+cin_range = 0:.2:4;
 selektion = [2 5 10 15 20];
 coli = 0;
 col = lines;
@@ -89,3 +89,10 @@ subplot(1,2,2)
 plot(cin_range, mittleres_potential)
 xlabel('c_{in}');
 ylabel('mittleres Potential');
+
+% wie groß darf c_in höchstens sein um im Mittel Spikes zu erhalten?
+cin_range = cin_range';
+mittleres_potential = mittleres_potential';
+
+ab = [ones(size(mittleres_potential)) cin_range] \ mittleres_potential;
+min_fuer_spikes = -(ab(1)-10)/ab(2)
