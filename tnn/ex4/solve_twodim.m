@@ -9,6 +9,9 @@ function [u, success] = solve_twodim(C,u0)
 %	u	function handle (one parameter)
 %	success	false, if initial conditions could not be met
 %
+% Übungsblatt 3 Aufgabe 4
+% Thomas Reckow, Markus Döring
+
 
 success = true;
 

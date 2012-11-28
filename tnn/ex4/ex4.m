@@ -1,3 +1,7 @@
+% Übungsblatt 3 Aufgabe 4
+% Thomas Reckow, Markus Döring
+
+
 clear all
 close all
 clc
