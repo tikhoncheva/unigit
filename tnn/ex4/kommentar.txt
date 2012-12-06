@@ -1,0 +1,6 @@
+Man kann deutlich erkennen, dass die einzige Konfiguration bei der die Lösungen divergieren a=2, b=.5 ist.
+Dies ist auch die einzige, bei der Eigenwerte mit Realteil >=1 auftauchen. 
+Bei a=1,b=.5 bzw. a=2,b=1 liegen Matrizen mit defizitärem Rang vor, was die Lösung der DGL inklusive 
+Anfangswerten verhindert. 
+Bei a=2,b=2 liegt eine ungedämpfte Schwingung vor, bei den übrigen eine gedämpfte Schwingung.
+
