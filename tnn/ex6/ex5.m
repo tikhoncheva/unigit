@@ -1,4 +1,4 @@
-clear all
+%clear all
 close all
 clc
 format compact
@@ -7,7 +7,7 @@ xs = 6:15;
 
 
 for i=1:length(xs)
-	subplot(2,5,i)
+	subplot(3,4,i)
 	[u,spikes] = simnn(xs(i));
 	
 	spy(spikes(:,1:500));
