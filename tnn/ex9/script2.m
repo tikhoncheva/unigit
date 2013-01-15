@@ -1,4 +1,4 @@
-% does excercise 9 part 2
+% this script does excercise 9 part 2
 % Markus Döring, Thomas Reckow
 
 k = 10;
@@ -17,7 +17,7 @@ d = diag(D);
 
 disp('=========')
 disp('Sorting')
-[d,ind] = sort(d);
+[d,ind] = sort(d,'descend');
 
 V = V(:,ind);
 

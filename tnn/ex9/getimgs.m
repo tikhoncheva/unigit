@@ -2,7 +2,7 @@ function [X] = getimgs()
 % get all image vectors for excercise 9 with normalized rows and 
 % feature-mean 0
 
-nPers = 40;
+nPers = 1;
 nImg = 10;
 % nPers = 1;
 % nImg = 3;
@@ -28,16 +28,17 @@ for i=1:nPers
 		end
 		
 		% insert normalized row
-		X((i-1)*nImg + j, :) = v/s;
+		X((i-1)*nImg + j, :) = double(v)/s;
 	end
 end
 
 % subtract the mean row
 disp('Subtracting Mean')
-m = mean(X);
-for i=1:size(X,1)
-	X(i,:) = X(i,:) - m;
-end
+X = bsxfun(@minus, X, mean(X,1));
+% m = mean(X);
+% for i=1:size(X,1)
+% 	X(i,:) = X(i,:) - m;
+% end
 
 
 end
