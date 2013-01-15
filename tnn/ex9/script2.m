@@ -2,7 +2,7 @@
 % Markus Döring, Thomas Reckow
 
 k = 10;
-wxh = [112 92];
+wxh = [92 112];
 
 disp('=========')
 disp('Getting Images')
@@ -20,13 +20,17 @@ disp('Sorting')
 [d,ind] = sort(d);
 
 V = V(:,ind);
-W = V(:,1:k);
 
 
 disp('=========')
 disp('Plotting')
-subplot(1,2,1)
-imshow(reshape(X(:,1),wxh(2),wxh(1)))
-subplot(1,2,2)
-imshow(reshape(X(:,1)*W,wxh(2),wxh(1)))
 
+figure;
+for i=1:k
+	subplot(2,5,i)
+	I = V(:,i);
+	I = I - min(I);
+	I = I/max(I);
+	I = reshape(I,wxh(2),wxh(1));
+	imshow(I)
+end
