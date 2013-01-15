@@ -1,4 +1,6 @@
-%% Überblick verschaffen
+% Markus Doering, Thomas Reckow
+
+%% Ueberblick verschaffen
 
 clear all
 close all
@@ -30,7 +32,7 @@ xlabel('input x')
 ylabel('mean dendritic potential')
 
 
-%% ausgewählte x
+%% ausgewaehlte x
 
 clear all
 close all
