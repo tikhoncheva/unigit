@@ -23,19 +23,8 @@ disp('Sorting')
 
 V = V(:,ind);
 
-
-disp('=========')
-disp('Plotting')
-
-figure;
-for i=1:k
-	subplot(2,5,i)
-	I = V(:,i);
-	I = I - min(I);
-	I = I/max(I);
-	I = reshape(I,wxh(2),wxh(1));
-	imshow(I)
-end
+% V is around 800MB, let's reduce it
+V = V(:,1:k);
 
 save result.mat X d V wxh k ind
 
@@ -43,13 +32,13 @@ save result.mat X d V wxh k ind
 
 load result.mat
 
+disp('=========')
+disp('Plotting')
+
 figure;
 for i=1:k
 	subplot(2,5,i)
-	I = V(:,i);
-	I = I - min(I);
-	I = I/max(I);
-	I = reshape(I,wxh(2),wxh(1));
+	I = vec2img(V(:,i));
 	imshow(I)
 end
 

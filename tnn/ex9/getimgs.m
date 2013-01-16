@@ -7,8 +7,6 @@ nImg = 10;
 % nPers = 1;
 % nImg = 3;
 
-
-
 wxh = [92 112];
 nPix = prod(wxh);
 
@@ -19,27 +17,45 @@ for i=1:nPers
 		% load image as row
 		imname = sprintf('orl_faces/s%d/%d.pgm', i, j);
 		fprintf('Loading image %s\n',imname); 
-		[v,~] = loadimg(imname);
-		s = norm(double(v));
+        
+		row = loadimg(imname);
+		s = norm(row);
 		
 		% check if row is normalizable
-		if s<eps
+		if s < eps
 			error('encountered all-zero image');
 		end
 		
 		% insert normalized row
-		X((i-1)*nImg + j, :) = double(v)/s;
+		X((i-1)*nImg + j, :) = row/s;
 	end
 end
 
 % subtract the mean row
 disp('Subtracting Mean')
 X = bsxfun(@minus, X, mean(X,1));
-% m = mean(X);
+
+% less efficient
+% m = mean(X,1);
 % for i=1:size(X,1)
 % 	X(i,:) = X(i,:) - m;
 % end
 
 
 end
+
+function X = loadimg(p)
+% load image vector from file
+%
+% input: 
+%	p	image path
+% output:
+%	X	image vector 1xN [double]
+
+X = imread(p);
+
+X = double(reshape(X, 1, numel(X)));
+
+end
+
 
