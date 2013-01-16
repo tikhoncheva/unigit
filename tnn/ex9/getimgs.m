@@ -2,7 +2,7 @@ function [X] = getimgs()
 % get all image vectors for excercise 9 with normalized rows and 
 % feature-mean 0
 
-nPers = 1;
+nPers = 40;
 nImg = 10;
 % nPers = 1;
 % nImg = 3;
