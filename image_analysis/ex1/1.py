@@ -14,7 +14,7 @@ from matplotlib import pyplot as plot
 from colorsys import rgb_to_hsv, hsv_to_rgb, rgb_to_yiq
 
 
-imfiles = ['f16.tiff', 'mandrill.tiff', 'lena.tiff', 'wildflower.png']
+imfiles = ['f16.tiff', 'lena.tiff', 'wildflower.png', 'mandrill.tiff', ]
 
 vrgb2hsv = np.vectorize(rgb_to_hsv)
 vhsv2rgb = np.vectorize(hsv_to_rgb)
@@ -35,8 +35,8 @@ def showimg(img):
     plot.imshow(img)
     
     
-def show3Dscatter(*args, **kwargs):
-    ax = plot.subplot(111, projection='3d')
+def show3Dscatter(m,n,k,*args, **kwargs):
+    ax = plot.subplot(m,n,k, projection='3d')
     ax.set_title(kwargs.pop('title', 'No Title'))
     ax.set_xlabel(kwargs.pop('xlabel', 'X'))
     ax.set_ylabel(kwargs.pop('ylabel', 'Y'))
@@ -54,52 +54,63 @@ if __name__ == "__main__":
         plot.figure()
         
         # read the image from file, subsample and scale to [0.0,1.0]
-        img = subsample(readImage(name),4)/256
+        img = subsample(readImage(name),8)/256
         
         # get single channels, shape isn't interesting
         r = img[:,:,0]
         g = img[:,:,1]
         b = img[:,:,2]
         
+        h, s, v = vrgb2hsv(r,g,b)
+        
+        r.reshape(r.size)
+        g.reshape(g.size)
+        b.reshape(b.size)
+        
+        h_im = h
+        s_im = s
+        v_im = v
+        
+        h.reshape(h_im.size)
+        s.reshape(s_im.size)
+        v.reshape(v_im.size)
+        
         # convert RGB to HSV
         h, s, v = vrgb2hsv(r,g,b)
         
         # create rgba tuples for plotting, 1 == opaque
         c = [(x,y,z,1) for x,y,z in zip(r.flat,g.flat,b.flat)]
-        
-        hflat = h.reshape(h.size)
-        sflat = s.reshape(s.size)
-        vflat = v.reshape(v.size)
 
-        #show3Dscatter(r,g,b,c=c)
-        
         # cylindrical coordinates
         # hue is angle, saturation is radius, value is length
-        hflat = 2*np.pi*hflat
-        hprime = np.cos(hflat)*sflat
-        sprime = np.sin(hflat)*sflat
-        vprime = v.flat
+        h_ang = 2*np.pi*h
+        x = np.cos(h_ang)*s
+        y = np.sin(h_ang)*s
+        z = v
         
-        show3Dscatter(hprime, sprime, vprime, c=c, edgecolor='None', xlabel='Hue/Saturation', ylabel='Hue/Saturation', zlabel='Value', title=name)
+        show3Dscatter(1,2,1, r, g, b, c=c, edgecolor='None', xlabel='Red', ylabel='Green', zlabel='Blue', title=name+" (RGB)")
+        show3Dscatter(1,2,2, x,y,z, c=c, edgecolor='None', xlabel='Hue/Saturation', ylabel='Hue/Saturation', zlabel='Value', title=name + " (HSV)")
         
         
         #### single image plots ####
         
-        imgs = [r,g,b,s,v] 
+        imgs = [img[:,:,0],img[:,:,1],img[:,:,2], s_im, v_im] 
         titles = ['red', 'green', 'blue', 'saturation', 'value', 'hue']
         plot.figure()
         for i in range(len(imgs)):
-            plot.subplot(2,3,i+1)
+            ax = plot.subplot(2,3,i+1)
             showimg(imgs[i])
+            ax.set_title(titles[i])
             plot.gray()
             
-        plot.subplot(2,3,6)
-        im = np.ndarray((r.shape[0], r.shape[1], 3))
-        im[:,:,0],im[:,:,1],im[:,:,2] = vhsv2rgb(h, np.ones(h.shape), np.ones(h.shape))
-        
+        ax = plot.subplot(2,3,6)
+        ax.set_title(titles[5])
+        im = np.ndarray((img.shape[0], img.shape[1], 3))
+        im[:,:,0],im[:,:,1],im[:,:,2] = vhsv2rgb(h_im, np.ones(imgs[0].shape)*1, np.ones(imgs[0].shape)*.7)
+
         showimg(im)
-        
-        
+        break
+
       
     plot.show()
         
