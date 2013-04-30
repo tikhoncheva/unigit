@@ -74,4 +74,4 @@ def mkCostMap(img1, img2):
     assert img2.dtype == numpy.float32
     assert img1.ndim == 3 and img2.ndim == 3
 
-    pass #IMPLEMENT ME (in one line, please)
+    return numpy.sqrt(numpy.sum(numpy.square(img1-img2),axis=2))
