@@ -33,9 +33,28 @@ def verticalPathsCosts(costMap):
         New functions to learn which could be useful:
         numpy.ones, numpy.zeros
     """
-
-    pathCosts = None #initialize array here
-    # IMPLEMENT ME HERE
+    
+    assert len(costMap.shape) == 2
+    pathCosts = numpy.ones(costMap.shape)
+    
+    m = pathCosts.shape[0]
+    n = pathCosts.shape[1]
+    
+    # path costs per pixel are 
+    # [sum of minimum path leading to pixel] + [cost of current pixel]
+    # so we initiate with the cost of the current pixel
+    pathCosts[:] = costMap[:]
+    for row in range(m-1):
+        for col in range(n):
+            if col == 0:
+                c = pathCosts[row,0:2]
+            elif col == n-1:
+                c = pathCosts[row,n-2:n]
+            else:
+                c = pathCosts[row,col-1:col+2]
+                
+            pathCosts[row+1,col] += numpy.min(c) 
+    
     assert pathCosts.shape == costMap.shape
     return pathCosts
 
@@ -54,11 +73,22 @@ def verticalPath_backtracking(cumulativeCosts):
         numpy.argmin, numpy.argmax
     """
 
-    pathImg = None #initialize array here
-    # IMPLEMENT ME HERE
+    pathImg = numpy.zeros(cumulativeCosts.shape, dtype=numpy.uint8)
+    m = pathImg.shape[0]
+    n = pathImg.shape[1]
+    min_i = 0
+    max_i = n-1
+    for row in range(m-1,-1,-1):
+        startingindex = min_i
+        i = numpy.argmin(cumulativeCosts[row,min_i:max_i+1]) + startingindex
+        min_i = numpy.max([i-1,0])
+        max_i = numpy.min([i+1,n-1])
+        pathImg[row,i] = 1
+    
     assert pathImg.shape == cumulativeCosts.shape
     assert pathImg.dtype == numpy.uint8 
     return pathImg
+    
 def mkCostMap(img1, img2):
     """Given two images, compute the pixel-wise L2 norm of the
        difference image.

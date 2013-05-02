@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import numpy
 import vigra
 import math
@@ -40,7 +42,14 @@ def patchDistances(referencePatch, patches):
     ov = patches[0:referencePatch.shape[0],0:referencePatch.shape[1],:,:]
     distances = ov - numpy.tile(referencePatch, (1, 1, 1, patches.shape[3]))
     distances = numpy.sqrt(numpy.sum(numpy.square(distances), axis=2))
-    distances = numpy.sum(distances, axis=(0,1))
+    
+    # have version 1.6 < 1.7 !
+    if numpy.__version__ >= 1.7 and False:
+        distances = numpy.sum(distances, axis=(0,1))
+    else:
+        distances = numpy.sum(distances, axis=0)
+        distances = numpy.sum(distances, axis=0)
+    
     return distances
 
 
@@ -354,7 +363,7 @@ if __name__ == "__main__":
 
     #Load an image.
     #We convert it to gray value before using it.
-    fname = "pebbles.png"
+    fname = "matrix_s.jpg"
     img = vigra.impex.readImage(fname)
 
     #make sure we got an RGB or grayscale image
