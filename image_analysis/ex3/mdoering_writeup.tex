@@ -6,12 +6,15 @@
 
 \usepackage{amsmath}
 \usepackage{amsthm}
+\usepackage{mathtools}
 
 %%%%% COMMANDS
 
 \newcommand{\FT}{\mathcal{F}}
+\newcommand{\T}{\mathrm{T}}
 \newcommand{\IFT}{\mathcal{F}^{-1}}
 \newcommand{\conv}{\ast}
+\newcommand{\defined}{\coloneqq}
 
 \newtheorem*{theorem}{Theorem}
 
@@ -29,14 +32,14 @@
 Given are an input signal $g$ and a filter $h$, which will act on the signal: 
 %
 \begin{align*}
-g(x) &= \begin{pmatrix}0  & 0  & 0  & 0  & 1  & 1  & 1  & 0  & 0  & 0 \end{pmatrix}^\mathrm T \\
-h(x) &= \begin{pmatrix}0  & 0  & 0  & 0  & 1  & 2  & 1  & 0  & 0  & 0 \end{pmatrix}^\mathrm T. 
+g(x) &= \begin{pmatrix}0  & 0  & 0  & 0  & 1  & 1  & 1  & 0  & 0  & 0 \end{pmatrix}^\T \\
+h(x) &= \begin{pmatrix}0  & 0  & 0  & 0  & 1  & 2  & 1  & 0  & 0  & 0 \end{pmatrix}^\T. 
 \end{align*}
 %
 The output signal will be 
 %
 \begin{equation*}
-(g\conv h)(x) = \begin{pmatrix}4  & 3  & 1  & 0  & 0  & 0  & 0  & 0  & 1  & 3 \end{pmatrix}^\mathrm T,
+(g\conv h)(x) = \begin{pmatrix}4  & 3  & 1  & 0  & 0  & 0  & 0  & 0  & 1  & 3 \end{pmatrix}^\T,
 \end{equation*}
 %
 a smoothened, shifted and amplified version of the signal. The circulant matrix of the filter is given by 
@@ -76,13 +79,57 @@ Let $g$ be a signal and let $h$ be a filter with
 \[
 \sum_k (h\conv g)(k) = \sum_k g(k). 
 \]
-In the general case $\sum_k g(k) \neq 0$, we find that $\sum_k h(k) = 1$.
+In the general case $\sum_k g(k) \neq 0$, we find that the DC term $\sum_k h(k) = 1$.
 \end{theorem}
 \begin{proof}
- Left to the reader as an exercise.
+Define $s\defined(1,\ldots,1)^\T$.
+%
+\begin{align*}
+\sum_j g(j) &= \sum_k (h\conv g)(j) = s^\T(h\conv g) \stackrel{\text{\tiny Convolution Theorem}}{=}\\
+            &= s^\T \IFT\left(\FT f\odot\FT g\right) = s^\T F^\dagger\left(Ff\odot Fg\right)\frac{1}{n} = \\
+            &= (1,0,0,\ldots,0)\left(Ff\odot Fg\right) = \left(s^\T f\cdot s^\T g\right) = \\
+            &= \left(\sum_k h(k)\right)\left(\sum_j g(j)\right)
+\end{align*}
+%
+We can divide both sides by the signal's sum and get $\sum_k h(k) = 1$.
 \end{proof}
 
+\section{DFT in 1-D}
+Given is the transformed function 
+\[
+ \mathring g(k) = \sqrt{n}\frac{i}{2}\left(\delta_{+2}(k) - \delta_{-2}(k)\right),
+\]
+and we want to compute the original function by discrete Fourier transform. Let $F_{l,\cdot}$ denote the $l$-th row of the Fourier matrix.
+\begin{align*}
+g(l) &= \frac{1}{\sqrt n} F_{l,\cdot} \mathring g= \frac i 2 \sum_{k=0}^{n-1}e^{\frac{2\pi i}{n} l k}\left(\delta_{+2}(k) - \delta_{-2}(k)\right) \\
+     &= \frac i 2 \left(e^{\frac{4\pi i}{n} l} - e^{-\frac{4\pi i}{n}l}\right) = \frac i 2 \left(2i\sin\left(\frac{4\pi}{n}l\right)\right) = -\sin\left(\frac{4\pi}{n}l\right)
+\end{align*}
 
+\section{DFT in 2-D}
+
+\section{Correlation Theorem}
+
+\begin{theorem} Cross Correlation Theorem
+\[
+ \FT\left(a\star g\right) = \FT(a)^*\odot\FT(g)
+\]
+\end{theorem}
+\begin{proof}
+We observe that the cross correlation operation can be stated in terms of the circulant matrix $A$ of $a$ as
+\[
+ a\star g = A^\dagger g.
+\]
+We recall the equation 
+\[
+ AW = W\mathring A {\ }\Leftrightarrow{\ } W^\dagger A^\dagger = \mathring{A}^\dagger W^\dagger {\ }\Leftrightarrow{\ } W^\dagger A^\dagger W = \mathring{A}^*,
+\]
+where $\mathring A$ is the diagonal matrix with entries $\mathring{a} = \FT a$ and $W$ is the normalized Fourier matrix ($WW^\dagger=I$).
+We obtain
+\begin{align*}
+\FT\left(a\star g\right) &= \FT\left(A^\dagger g\right) = W^\dagger A^\dagger g = W^\dagger A^\dagger W W^\dagger g\\
+			 &= \mathring{A}^* W^\dagger g = \FT(a)^*\odot\FT(g).
+\end{align*}
+\end{proof}
 
 
 \end{document}
