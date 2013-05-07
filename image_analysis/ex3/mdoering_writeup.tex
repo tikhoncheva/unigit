@@ -1,0 +1,88 @@
+\documentclass[11pt]{scrartcl}
+
+%\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+
+\usepackage{amsmath}
+\usepackage{amsthm}
+
+%%%%% COMMANDS
+
+\newcommand{\FT}{\mathcal{F}}
+\newcommand{\IFT}{\mathcal{F}^{-1}}
+\newcommand{\conv}{\ast}
+
+\newtheorem*{theorem}{Theorem}
+
+
+
+\begin{document}
+
+
+
+\title{Image Analysis Excercise Sheet 3}
+\author{Markus Doering, 3153320}
+\maketitle
+
+\section{Convolution in 1-D}
+Given are an input signal $g$ and a filter $h$, which will act on the signal: 
+%
+\begin{align*}
+g(x) &= \begin{pmatrix}0  & 0  & 0  & 0  & 1  & 1  & 1  & 0  & 0  & 0 \end{pmatrix}^\mathrm T \\
+h(x) &= \begin{pmatrix}0  & 0  & 0  & 0  & 1  & 2  & 1  & 0  & 0  & 0 \end{pmatrix}^\mathrm T. 
+\end{align*}
+%
+The output signal will be 
+%
+\begin{equation*}
+(g\conv h)(x) = \begin{pmatrix}4  & 3  & 1  & 0  & 0  & 0  & 0  & 0  & 1  & 3 \end{pmatrix}^\mathrm T,
+\end{equation*}
+%
+a smoothened, shifted and amplified version of the signal. The circulant matrix of the filter is given by 
+%
+\begin{equation*}
+H = %
+ \begin{pmatrix}
+  0  & 0  & 0  & 0  & 1  & 2  & 1  & 0  & 0  & 0  \\
+  0  & 0  & 0  & 0  & 0  & 1  & 2  & 1  & 0  & 0  \\
+  0  & 0  & 0  & 0  & 0  & 0  & 1  & 2  & 1  & 0  \\
+  0  & 0  & 0  & 0  & 0  & 0  & 0  & 1  & 2  & 1  \\
+  1  & 0  & 0  & 0  & 0  & 0  & 0  & 0  & 1  & 2  \\
+  2  & 1  & 0  & 0  & 0  & 0  & 0  & 0  & 0  & 1  \\
+  1  & 2  & 1  & 0  & 0  & 0  & 0  & 0  & 0  & 0  \\ 
+  0  & 1  & 2  & 1  & 0  & 0  & 0  & 0  & 0  & 0  \\
+  0  & 0  & 1  & 2  & 1  & 0  & 0  & 0  & 0  & 0  \\
+  0  & 0  & 0  & 1  & 2  & 1  & 0  & 0  & 0  & 0
+ \end{pmatrix}.
+\end{equation*}
+%
+% The convolution theorem tells us that 
+% %
+% \begin{equation*}
+% (g\conv h)(x) = \IFT\left(\FT g\odot\FT h\right)(x),
+% \end{equation*}
+% %
+% and therefore 
+%
+The convolution of $g$ and $h$ can be computed as 
+%
+\begin{equation*}
+ g\conv h = H\cdot g.
+\end{equation*}
+%
+\begin{theorem}
+Let $g$ be a signal and let $h$ be a filter with 
+\[
+\sum_k (h\conv g)(k) = \sum_k g(k). 
+\]
+In the general case $\sum_k g(k) \neq 0$, we find that $\sum_k h(k) = 1$.
+\end{theorem}
+\begin{proof}
+ Left to the reader as an exercise.
+\end{proof}
+
+
+
+
+\end{document}
