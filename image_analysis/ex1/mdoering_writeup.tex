@@ -1,0 +1,52 @@
+\documentclass[11pt]{scrartcl}
+
+%\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+
+\begin{document}
+
+
+
+\title{Image Analysis Excercise Sheet 1}
+\author{Markus Doering, 3153320}
+\maketitle
+
+\begin{figure}[hb]
+\includegraphics[width=\linewidth]{mandrill_dist.png} 
+\caption{Mandrill: We can see the bright blue and red parts of the image clearly in both color distributions. The HSV distribution shows that the bright spots are well saturated.}
+\end{figure}
+\begin{figure}[ht]
+\includegraphics[width=\linewidth]{f16_dist.png}
+\caption{F16: The distribution plots reveal faulty imaging - a pink stripe on the left hand side of the image.}
+\end{figure}
+\begin{figure}[ht]
+\includegraphics[width=\linewidth]{lena_dist.png}
+\caption{Lena: The overly red Lena picture can be identified by its distribution, whcih takes the shape of a diagonal line in RGB space, and a cylindrical shape in HSV space.}
+\end{figure}
+\begin{figure}[ht]
+\includegraphics[width=\linewidth]{wildflower_dist.png}
+\caption{Wildflower: The bright colors of the wildflowers can be seen in the distribution plots. They reside on the edges of the RGB cube, and on the upper side of the HSV cylinder. }
+\end{figure}
+
+
+\begin{figure}[ht]
+\includegraphics[width=\linewidth]{mandrill_color.png} 
+\caption{Mandrill: The red, green and blue images reveal equal amounts of details. The hue image shows, as expected, the color distribution throughout the image, while saturation and value can be related to the face's structure.}
+\end{figure}
+\begin{figure}[ht]
+\includegraphics[width=\linewidth]{f16_color.png}
+\caption{F16: As the picture is mostly grayscale, the hue image doesn't make much sense compared to the value iamge. Again, red green and blue look quite similar.}
+\end{figure}
+\begin{figure}[ht]
+\includegraphics[width=\linewidth]{lena_color.png}
+\caption{Lena: Since the image is red in large parts, the red channel reveals the most structure information. In HSV space, it is again the value channel that shows structure, while the hue channel is uniformly red.}
+\end{figure}
+\begin{figure}[ht]
+\includegraphics[width=\linewidth]{wildflower_color.png}
+\caption{Wildflower: Due to the subsampling, most of the fine details aren't visible anymore. Only the hue channel giives some infomration about the distribution of flowers in the original image.}
+\end{figure}
+
+
+
+\end{document}
