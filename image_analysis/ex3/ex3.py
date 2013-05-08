@@ -1,4 +1,9 @@
 #/usr/bin/python
+# coding: utf-8
+# 
+# Author: Markus Doering
+# File: ia_03_03.py
+#
 
 from numpy import set_printoptions , zeros , finfo, \
     exp, pi, isreal, real_if_close, fliplr, flipud
@@ -23,11 +28,13 @@ def getmat(width_low, width_med, n, content='low'):
     
     # inner rectangle mask
     low = zeros((n,n))
-    low[mid-width_low:mid+width_low+1,mid-width_low:mid+width_low+1] = 1
+    low[mid-width_low:mid+width_low+1,\
+        mid-width_low:mid+width_low+1] = 1
     
     # middle frame mask
     med = zeros((n,n))
-    med[mid-width_low-width_med:mid+width_low+width_med+1,mid-width_low-width_med:mid+width_low+width_med+1] = 1
+    med[mid-width_low-width_med:mid+width_low+width_med+1,\
+        mid-width_low-width_med:mid+width_low+width_med+1] = 1
     med = med * (1-low)
     
     # random complex numbers of size nxn with amplitude 1
@@ -45,14 +52,13 @@ def getmat(width_low, width_med, n, content='low'):
     
     # check if we did it right
     should_be_real = real_if_close(ifft2(mat))
-    assert isreal(should_be_real).all(), "The inverse FFT was not real."
+    assert isreal(should_be_real).all(), \
+        "The inverse FFT was not real."
     
     return mat 
 
 
-
 if __name__ == "__main__":
-    
     
     a = getmat(2,2,51,content='low')
     b = getmat(2,2,51,content='med')
