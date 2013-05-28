@@ -25,9 +25,11 @@ def vid2pngs(vid, prefix="image_"):
     save video as png images
     '''
     
-    # use a loop since the documentation on vigra.impex.writeSlices is unclear
+    # use a loop since the documentation on
+    # vigra.impex.writeSlices is unclear
     for t in range(vid.shape[2]):
-        vigra.impex.writeImage(vid[...,t],"tmp/%s%03d.png" % (prefix,t,))
+        vigra.impex.writeImage(vid[...,t],"tmp/%s%03d.png" %\
+            (prefix,t,))
     
 def ex1():
     '''
@@ -57,8 +59,10 @@ def ex1():
         plot.show()
     else: # generate a video with mean / median subtracted
         # subtract 
-        volmean = vol-meanim.reshape((meanim.shape[0], meanim.shape[1],1)) + 255
-        volmed = vol-medim.reshape((medim.shape[0], medim.shape[1],1)) + 255
+        volmean = vol-meanim.reshape(\
+            (meanim.shape[0],meanim.shape[1],1)) + 255
+        volmed = vol-medim.reshape(\
+            (medim.shape[0],medim.shape[1],1)) + 255
         
         # normalize by maximum of both
         totalmax = max(volmean.max(),volmed.max())
@@ -70,7 +74,8 @@ def ex1():
         
         vid2pngs(vid)
         
-        # final video generation steo is done by mencoder via bash script
+        # final video generation step is done 
+        # by mencoder via bash script
         
     
 if __name__ == "__main__":

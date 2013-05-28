@@ -27,7 +27,8 @@ class PatchMaker():
         im1, im2 are images with axes order 'rc'
         '''
         
-        cost_volume = np.ones((im1.shape[0], im1.shape[1], 2*self.l+1))*(-np.inf)
+        cost_volume = np.ones((im1.shape[0], im1.shape[1],\
+            2*self.l+1))*(-np.inf)
         
         for r in range(im1.shape[0]):
             print('Calculating in row {}'.format(r))
@@ -66,12 +67,12 @@ class PatchMaker():
 def nxcorr(p1,p2):
     '''
     normalized cross-correlation
-    see http://en.wikipedia.org/wiki/Cross-correlation#Normalized_cross-correlation
     '''
     f = p1.reshape((-1,))
     t = p2.reshape((-1,))
     
-    assert len(t) == len(f), "The patches must have the same number of elements ({} vs. {})".format(len(t),len(f))
+    assert len(t) == len(f), "The patches must have the same " + \
+        "number of elements ({} vs. {})".format(len(t),len(f))
     
     F = f-f.mean()
     T = t-t.mean()
@@ -101,9 +102,13 @@ def ex2():
         cost = vigra.readHDF5(fn, 'data')
         cost = cost.view(np.ndarray)
         
-    scost = vigra.filters.gaussianSmoothing(vigra.taggedView(cost.astype(np.float32), axistags=vigra.defaultAxistags('yxc')),3.5)
-    SD = normalize(np.argmax(np.flipud(scost.swapaxes(0,2)).swapaxes(0,2), axis=2))
-    D = normalize(np.argmax(np.flipud(cost.swapaxes(0,2)).swapaxes(0,2), axis=2))
+    scost = vigra.filters.gaussianSmoothing(\
+        vigra.taggedView(cost.astype(np.float32),\
+        axistags=vigra.defaultAxistags('yxc')),3.5)
+    SD = normalize(np.argmax(\
+        np.flipud(scost.swapaxes(0,2)).swapaxes(0,2), axis=2))
+    D = normalize(np.argmax(\
+        np.flipud(cost.swapaxes(0,2)).swapaxes(0,2), axis=2))
     
     
     

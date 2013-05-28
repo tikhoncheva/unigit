@@ -1,0 +1,50 @@
+\documentclass[11pt,a4paper]{scrartcl}
+
+\usepackage{fullpage}
+
+%\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{mathtools}
+
+\usepackage{listings}
+
+%%%%% COMMANDS
+
+\newcommand{\FT}{\mathcal{F}}
+\newcommand{\T}{\mathrm{T}}
+\newcommand{\IFT}{\mathcal{F}^{-1}}
+\newcommand{\conv}{\ast}
+\newcommand{\defined}{\coloneqq}
+
+\newtheorem*{theorem}{Theorem}
+
+
+
+\begin{document}
+
+\title{Image Analysis Excercise Sheet 5}
+\author{Markus Doering, 3153320}
+\maketitle
+
+\section{Background Subtraction in Video}
+\begin{enumerate}
+ \item nothing to do
+ \item see \lstinline$mean_and_median_image.png$ % includegraphics!
+ \item see \lstinline$left_is_mean_-_right_is_median.avi$
+ \item An object that is removed as background in the median subtraction was present in at least half of the analyzed frames. 
+ \item bla noise blub robust bli foreground too long present fasuli
+\end{enumerate}
+
+\section{Cost Volume Filtering for Stereo}
+blub
+
+\newpage
+\appendix
+\lstinputlisting[language=python]{ia_05_01.py}
+\newpage
+\lstinputlisting[language=python]{ia_05_02.py}
+\end{document}
