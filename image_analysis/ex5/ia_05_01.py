@@ -1,4 +1,10 @@
 #!/usr/bin/python
+# coding: utf-8
+# 
+# Author: Markus Doering
+# File: ia_05_01.py
+#
+
 
 import vigra
 import numpy as np
@@ -15,8 +21,8 @@ def readvid():
     return vol
 
 def vid2pngs(vid, prefix="image_"):
-    for t in vid.shape[2]:
-        vigra.impex.writeImage(vid[...,t],"tmp/%s%03d.png" % (t,))
+    for t in range(vid.shape[2]):
+        vigra.impex.writeImage(vid[...,t],"tmp/%s%03d.png" % (prefix,t,))
     
 def ex1():
     vol = readvid()
