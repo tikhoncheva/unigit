@@ -15,7 +15,7 @@ matplotlib.use('Qt4Agg')
 from matplotlib import pyplot as plot
 from matplotlib.image import imread
 
-nImg = 5
+nImg = 4
 
 def rgb2gray(rgb):
     '''
@@ -96,13 +96,13 @@ def ex1():
         plot.legend(['histogram', 'fitted normal dist.'], loc='lower center')
         plot.title('histogram of gradient in x-direction')
         
-        # show histogram for x gradient
+        # show histogram for y gradient
         plot.subplot(3, nImg, k+2*nImg+1)
         ybincenters, ybins, ygauss = myHist(ygrad)
         plot.semilogy(ybincenters,ybins, 'b')
         plot.semilogy(ybincenters,ygauss, 'r--')
         plot.legend(['histogram', 'fitted normal dist.'], loc='lower center')
-        plot.title('histogram of gradient in x-direction')
+        plot.title('histogram of gradient in y-direction')
         
     plot.show()
     
