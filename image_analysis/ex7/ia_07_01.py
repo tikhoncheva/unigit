@@ -22,10 +22,7 @@ def rgb2gray(rgb):
     convert from RGB to grayscale
     http://en.wikipedia.org/wiki/Grayscale#Converting_color_to_grayscale
     '''
-    
-    r, g, b = rgb[:,:,0], rgb[:,:,1], rgb[:,:,2]
-    gray = 0.299 * r + 0.587 * g + 0.114 * b
-    return gray
+    return .299*rgb[:,:,0] + .587*rgb[:,:,1] + .114*rgb[:,:,2]
 
 def getRealWorldImages():
     '''
@@ -41,10 +38,11 @@ def gradient(im, direction='x'):
     filt = np.ones((2,1))
     filt[0,0] = -1
     
-    result = np.zeros(im.shape)
-    if direction == 'y': # first axis is vertical, i.e. y, so the filter is fine
+    if direction == 'y': 
+        # first axis is vertical, i.e. y, so the filter is fine
         pass
-    elif direction == 'x': # transpose the filter to horizontal direction
+    elif direction == 'x': 
+        # transpose the filter to horizontal direction
         filt = filt.transpose()
     else:
         raise ValueError("unknown axis {}".format(direction))
@@ -78,26 +76,30 @@ def ex1():
     
     imgs = getRealWorldImages()
     
+    # compute the gradients in x and y direction separately
     xgrads = [(gradient(img, direction='x')) for img in imgs]
     ygrads = [(gradient(img, direction='y')) for img in imgs]
     
 
     for img, xgrad, ygrad, k in zip(imgs, xgrads, ygrads, range(len(imgs))):
+        # show image
         plot.subplot(3, nImg, k+1)
         plot.imshow(img)
         plot.gray()
         plot.title('Original Image')
         
+        # show histogram for x gradient
         plot.subplot(3, nImg, k+nImg+1)
         xbincenters, xbins, xgauss = myHist(xgrad)
-        plot.semilogy(xbincenters,xbins)
+        plot.semilogy(xbincenters,xbins, 'b')
         plot.semilogy(xbincenters,xgauss, 'r--')
         plot.legend(['histogram', 'fitted normal dist.'], loc='lower center')
         plot.title('histogram of gradient in x-direction')
         
+        # show histogram for x gradient
         plot.subplot(3, nImg, k+2*nImg+1)
         ybincenters, ybins, ygauss = myHist(ygrad)
-        plot.semilogy(ybincenters,ybins)
+        plot.semilogy(ybincenters,ybins, 'b')
         plot.semilogy(ybincenters,ygauss, 'r--')
         plot.legend(['histogram', 'fitted normal dist.'], loc='lower center')
         plot.title('histogram of gradient in x-direction')
