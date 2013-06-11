@@ -2,7 +2,7 @@
 # coding: utf-8
 # 
 # Author: Markus Doering
-# File: ia_07_01.py
+# File: ia_07_03.py
 #
 
 import vigra
