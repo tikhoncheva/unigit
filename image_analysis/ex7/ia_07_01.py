@@ -95,6 +95,7 @@ def ex1():
         plot.semilogy(xbincenters,xgauss, 'r--')
         plot.legend(['histogram', 'fitted normal dist.'], loc='lower center')
         plot.title('histogram of gradient in x-direction')
+        plot.axis([-260,260,1e-50,1])
         
         # show histogram for y gradient
         plot.subplot(3, nImg, k+2*nImg+1)
@@ -103,6 +104,7 @@ def ex1():
         plot.semilogy(ybincenters,ygauss, 'r--')
         plot.legend(['histogram', 'fitted normal dist.'], loc='lower center')
         plot.title('histogram of gradient in y-direction')
+        plot.axis([-260,260,1e-50,1])
         
     plot.show()
     
