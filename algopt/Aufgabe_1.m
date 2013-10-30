@@ -24,7 +24,7 @@ clc
 
 %TODO auf 50 setzen
 % maximale betrachtete Dimension
-N = 5;
+N = 50;
 
 % Vorbelegen der Ausgabevektoren
 fval_ga(1,N) = 0;
@@ -48,7 +48,7 @@ for i=2:1:N
     options = optimset('Display','Off');
     [~, fval_fminsearch(1,i)] = fminsearch(@rosenbrock, x0(1:i), options);
 
-    % 
+    % Finde Minimum per 'interior-reflective Newton method'
     options = optimoptions('fminunc','GradObj','on','Display','Off');
     [~, fval_fminunc(1,i)]=fminunc(@rosenbrock, x0(1:i), options);
 end
