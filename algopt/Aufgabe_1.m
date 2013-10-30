@@ -22,7 +22,8 @@ clear all
 close all
 clc
 
-%maximale betrachtete Dimension
+%TODO auf 50 setzen
+% maximale betrachtete Dimension
 N = 5;
 
 % Vorbelegen der Ausgabevektoren
@@ -30,6 +31,9 @@ fval_ga(1,N) = 0;
 fval_fminsearch(1,N) = 0;
 fval_fminunc(1,N) = 0;
 
+% Startwert für fminsearch und fminunc
+x0 = zeros(N,1);
+	
 % iteriere über die Dimension des Rosenbrockproblems
 for i=2:1:N
 	
@@ -39,23 +43,21 @@ for i=2:1:N
 	options = gaoptimset('Display', 'off');
     [~, fval_ga(1,i)] = ga(@rosenbrock_for_ga, N, options);
 	
-    % Startwert für fminsearch und fminunc
-    x0 = zeros(N,1);
-	
-	% Finde Minimum per 'Nelder-Mead Simplex Method'
+
+    % Finde Minimum per 'Nelder-Mead Simplex Method'
     options = optimset('Display','Off');
-    [~, fval_fminsearch(1,i)] = fminsearch(@rosenbrock, x0, options);
-	
-	%TODO Funktioniert auf meinem R2009b nicht
-    %options = optimoptions('fminunc','GradObj','on','Display','Off');
-    %[~, fval_fminunc(1,i)]=fminunc(@rosenbrock, x0, options);
+    [~, fval_fminsearch(1,i)] = fminsearch(@rosenbrock, x0(1:i), options);
+
+    % 
+    options = optimoptions('fminunc','GradObj','on','Display','Off');
+    [~, fval_fminunc(1,i)]=fminunc(@rosenbrock, x0(1:i), options);
 end
 
 figure;
 hold on
 plot(1:N, fval_ga, '-*g');
 plot(1:N, fval_fminsearch, '-*r');
-% plot(1:N, fval_fminunc, '-*b');
+plot(1:N, fval_fminunc, '-*b');
 legend('ga','fminsearch','fminunc');
 
 end
@@ -77,9 +79,10 @@ f = sum(100 * (xpp - x.^2).^2 + (1 - x).^2);
 end
 %% function [f, df] = rosenbrock(x)
 %
-% Funktion rosenbrock(x) berechnet den Funktionswert $f(x)$ und den Gradientwert von der Rosenprockfunktion im Punkt $x$
 %
 function [f, df]= rosenbrock(x)
+% Funktion rosenbrock(x) berechnet den Funktionswert $f(x)$ und den Gradientwert von der Rosenprockfunktion im Punkt $x$
+
 % Dimension des Vektors
 N= length(x);
 
@@ -87,17 +90,28 @@ N= length(x);
 f = rosenbrock_for_ga(x);
 
 % berechne den Gradientwert
-%TODO geht schneller, sh. rosenbrock_for_ga
-df(N,1)=0;
-df(1,1)=-200*(x(2)-x(1))*2*x(1)-2*(1-x(1));
-df(N,1)= 200*(x(N)-x(N-1)*x(N-1));
-for i=2:1:N-1
-   df(i,1)=-200*(x(i+1)-x(i))*2*x(i)-2*(1-x(i))+200*(x(i)-x(i-1)*x(i-1));
+
+xh = x(3:end);
+xm = x(2:end-1);
+xl = x(1:end-2);
+
+df(N,1) = 0;
+
+% generell: $2\leq i \leq N-1$
+df(2:end-1) = -400*(xh-xm.^2).*xm - 2*(1-xm) + 200*(xm - xl.^2);
+
+% speziell: $i=1$
+df(1) = -400*(x(2)-x(1)^2)*x(1) - 2*(1-x(1));
+
+% speziell: $i=N$
+df(N) = 200*(x(N)-x(N-1).^2);
+
 end
-end
+
+
 %% Zusammenfassung
 %
-% Anhand der Ergebnisse laesst sich schliessen, dass die Methode fminsearch
+% Anhand der Ergebnisse lässt sich schließen, dass die Methode fminsearch
 % die beste Approximation von $x^{*}$ liefert. Das schlechteste Ergebnis
-% rechnet die Funktion ga aus. Bei den groesseren Dimensionen sind alle drei
+% rechnet die Funktion ga aus. Bei den größeren Dimensionen sind alle drei
 % Approximationen sehr weit vom Optimum entfernt.
