@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+#coding: utf-8
 
 # Solve the missionary-cannibal-problem by using depth-first search.
 

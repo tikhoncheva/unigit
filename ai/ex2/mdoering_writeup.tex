@@ -37,10 +37,14 @@
 
 \section{Search Algorithms}
 \subsection{Tree Traversal}
-% \begin{figure}[ht]
-%  \includegraphics[width=.65\linewidth]{missionaries_cropped.jpg}
-%  \caption{The state space graph of the missionary-cannibal-boat problem. The columns denote the objects (M, C, B), the rows the location (side of the river). It turns out that most possible states are not allowed by the problem statement.}
-% \end{figure}
+See figure \ref{fig:search}.
+\begin{figure}[ht]
+ \includegraphics[width=.65\linewidth]{search.png}
+ \caption{Tree traversal. The order of node expansion is color coded: For the ``left to right'' types, 
+ depth-first is red and breadth-first is green. For the ``right to left'' types, depth-first is orange, 
+ breadth-first is blue. The total number of visited nodes can be read at the bottom right target node.}
+ \label{fig:search}
+\end{figure}
 
 \subsection{Infinite Trees}
 
@@ -55,10 +59,10 @@ usage.
 \section{Water-Jug Problem}
 
 \subsection{Problem}
-We represent the state with a vector $s = (x,y)^T\in\IR^2$, with entries $x,y$ standing 
-for the amount of water in each jug, in liters. The initial state would therefore 
+We describe states as vectors $s = (x,y)^T\in\IR^2$, with entries $x,y$ representing 
+the amount of water in each jug, in liters. The initial state would therefore 
 be $(0,0)^T$, and the target state $(0,4)^T$. Path costs can be chosen constant 
-as $c=1$. An action $f:\ \IR^2\map\IR^2,$ is valid if
+(e.g., $c=1$). An action $f:\ \IR^2\map\IR^2,$ is valid if
 
 \begin{itemize}
 \item $f(x,y) = (0,y)^T$ or
@@ -68,43 +72,51 @@ as $c=1$. An action $f:\ \IR^2\map\IR^2,$ is valid if
 \end{itemize}
 
 \subsection{State-Space Graph}
-% \begin{figure}[ht]
-%  \includegraphics[width=.65\linewidth]{missionaries_cropped.jpg}
-%  \caption{The state space graph of the missionary-cannibal-boat problem. The columns denote the objects (M, C, B), the rows the location (side of the river). It turns out that most possible states are not allowed by the problem statement.}
-% \end{figure}
+See figure \ref{fig:water}.
+\begin{figure}[ht]
+ \includegraphics[width=.35\linewidth]{water_red.jpg}
+ \caption{The state space graph of the water jug problem, ignoring edges that lead to cycles.}
+ \label{fig:water}
+\end{figure}
 
 \subsection{}
-Obvious.
+I'm not going to draw any more state spaces (or trees, for that matter), but I promise I know how to traverse a tree.
 
 \section{Missionaries and Cannibals}
 
-See the python script \emph{mcb.py}. 
+See the python script \verb$mcb.py$. 
 
 \section{Optimality of $A^*$}
 
 \begin{theorem}
 Let $h$ be an admissible heuristic function, that is for all nodes $n$ and for the 
 true cost function $h^*$ 
-\begin{equation}\label{eq:adm}
+\begin{equation*}
 h(n)\leq h^*(n)
-\end{equation}
-holds. Then the $A^*$ algorithm is optimal on the search tree $T$.
+\end{equation*}
+holds. Then the $A^*$ algorithm is optimal on every search tree $T$.
 \end{theorem}
 \begin{proof}
-Let $f(n) = g(n) + h(n)$ denote the desirability function that $A^*$ tries to 
+Let $f(n) = g(n) + h(n)$ denote the cost estimate function that $A^*$ tries to 
 minimize. The function $g$ gives the true cost up to node $n$, and $h$ is the 
-heuristic. Let $m,n$ be two states on paths $P_m, P_n$ to a goal state, and let 
-$P_m$ be more expensive than $P_n$. Let $m$ be adjacent to the goal state on path 
-$P_m$. Then $A^*$ is optimal if and only if node $n$ is erxpanded before node $m$.  
+heuristic for the cost from state $n$ to a goal state. Let $P_m, P_n$ be to paths which lead to goal states 
+$G_m, G_n$, respectively, and let $P_m$ be more expensive than $P_n$.
 
-We prove the theorem indirectly. Assume node $m$ gets expanded before node $n$. 
-This implies that $f(n)>f(m)\Leftrightarrow g(n) + h(n) > g(m) + h(m)$. Path $P_n$
-is shorter than path $P_m$, and therefore 
-\begin{equation}
-g(n)+h^*(n) < g(m) + h^*(m) \stackrel{\text{Eq. \ref{eq:adm}}}{\leq} g(m) + h(m) < g(n) + h(n), 
-\end{equation}
-which contradicts the admissability of $h$. Therefore, $m$ does not get expanded before any node on 
-path $P_n$, and $A^*$ finds the optimal solution. 
+We prove the theorem indirectly. Choose $m$ as the adjacent node of $G_m$ on $P_m$, and assume that $G_m$ is accepted 
+as a solution by the algorithm. Then there is a first node $n$ on $P_n$ which has not been expanded such that
+\begin{equation*}
+f(G_m) = g(m) + h^*(m) \leq g(n) + h(n) = f(n) .
+\end{equation*}
+$P_n$ is shorter than $P_m$, which implies
+\begin{equation*}
+g(G_n) = g(n) + h^*(n) < g(m) + h^*(m) = g(G_M),
+\end{equation*}
+and chaining the inequalities results in 
+\begin{equation*}
+g(n) + h^*(n) < g(n) + h(n),
+\end{equation*}
+which contradicts the admissability of $h$. Therefore, all nodes on path $P_n$ get expanded before $G_m$ is acccepted, 
+and the optimal path is found.
 \end{proof}
 %\newpage
 %\appendix
