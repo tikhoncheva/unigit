@@ -5,18 +5,59 @@
 #include <sys/resource.h>
 #include <stdio.h>
 
-#define N 512
-#define TILE_SIZE 64
+#define TILE_SIZE 4
+
 typedef std::vector<std::vector<double> > Matrix;
 
-void fill(Matrix &A, int random=0)
+inline double timevalToSeconds(const struct timeval &t)
 {
-    for (int i=0; i<N; i++)
+    return t.tv_sec + t.tv_usec / 1000000.0;
+}
+    
+
+/* keeps track of time, no security checks */
+class MyTimer
+{
+public:
+
+    MyTimer()
+    {
+        this->reset();
+    }
+
+    void reset() 
+    {
+        this->fill();
+        this->old_tv = this->tv;
+    }
+    
+    double getSeconds()
+    {
+        this->fill();
+        return timevalToSeconds(this->tv) - timevalToSeconds(this->old_tv);
+    }
+
+private:
+
+    struct timeval tv, old_tv;
+
+    void fill()
+    {
+        struct rusage usage;
+        if (getrusage(RUSAGE_SELF, &usage))
+            exit(1);
+        this->tv = usage.ru_utime;
+    }
+};
+
+void fill(Matrix &A, int n, int random=0)
+{
+    for (int i=0; i<n; i++)
     {
         // memory leak! Just for demo.
         std::vector<double> *b = new std::vector<double>;
         A.push_back(*b);
-        for(int j=0; j<N; j++)
+        for(int j=0; j<n; j++)
         {
             if (random)
                 A[i].push_back((double) rand()/(double)RAND_MAX);
@@ -30,12 +71,17 @@ void fill(Matrix &A, int random=0)
 /* 
  * Matrix-Matrix-Multiplication
  * FLOP = 2 per iteration * N^3 iterations = 2*N^3
+ *
+ * Result:
+Seconds: 4.848303
+Problem Size: 512
+MFLOPS: 55.367
  */
-void mult(const Matrix &A, const Matrix &B, Matrix &C)
+void mult(const Matrix &A, const Matrix &B, Matrix &C, int n)
 {
-    for (int i=0; i<N; i++)
-        for (int j=0; j<N; j++)
-            for (int k=0; k<N; k++)
+    for (int i=0; i<n; i++)
+        for (int j=0; j<n; j++)
+            for (int k=0; k<n; k++)
                 C[i][j] += A[i][k]*B[k][j];
 }
 
@@ -43,47 +89,69 @@ void mult(const Matrix &A, const Matrix &B, Matrix &C)
  * Matrix-Matrix-Multiplication, tiled version
  * FLOP = 2 per iteration * N^3 iterations = 2*N^3
  * (ignoring boundaries, N is multiple of TILE_SIZE)
+ *
+ * Result: 
+
+TILE_SIZE = 64
+Seconds: 4.020251
+Problem Size: 512
+MFLOPS: 66.771
+
+TILE_SIZE = 16
+Seconds: 3.128195
+Problem Size: 512
+MFLOPS: 85.812
+
+TILE_SIZE = 8
+Seconds: 2.488156
+Problem Size: 512
+MFLOPS: 107.885
+
+TILE_SIZE = 4
+Seconds: 1.820114
+Problem Size: 512
+MFLOPS: 147.483
+
  */
-void tiledMult(const Matrix &A, const Matrix &B, Matrix &C)
+void tiledMult(const Matrix &A, const Matrix &B, Matrix &C, int n)
 {
-    for (int i=0; i<N; i++)
-        for (int j=0; j<N; j++)
-            for (int k=0; k<N; k++)
-                C[i][j] += A[i][k]*B[k][j];
+    for (int i=0; i<n; i+=TILE_SIZE)
+        for (int j=0; j<n; j+=TILE_SIZE)
+            for (int k=0; k<n; k+=TILE_SIZE)
+                for (int ii=0; ii<TILE_SIZE; ii++)
+                    for (int jj=0; jj<TILE_SIZE; jj++)
+                        for (int kk=0; kk<TILE_SIZE; kk++)
+                            C[i+ii][j+jj] += A[i+ii][k+kk]*B[k+kk][j+jj];
 }
 
+
+void singleRun(unsigned char tiled)
+{
+    double time_s;
+    Matrix A, B, C;
+    MyTimer t;
+    
+    int n = 512;
+    
+    fill(A,n,1);
+    fill(B,n,1);
+    fill(C,n,0);
+    
+    t.reset();
+    if (!tiled)
+        mult(A, B, C, n);
+    else
+        tiledMult(A, B, C, n);
+    time_s = t.getSeconds();
+    
+    printf("Seconds: %.6f\n", time_s);
+    printf("Problem Size: %d\n", n);
+    printf("MFLOPS: %.3f\n", 2*n*n*n/(time_s*1e6));
+}
 
 int main(int argc, char** argv)
 {
-    struct rusage usage;
-    struct timeval s, t;
-    double time_ms;
-    Matrix A, B, C;
-    
-    fill(A,1);
-    fill(B,1);
-    fill(C,0);
-    
-    if (getrusage(RUSAGE_SELF, &usage))
-        return 1;
-    s = usage.ru_utime;
-    
-    mult(A, B, C);
-    
-    if (getrusage(RUSAGE_SELF, &usage))
-        return 2;
-    t = usage.ru_utime;
-    
-    time_ms = t.tv_sec*1000.0 + t.tv_usec / 1000.0;
-    time_ms -= s.tv_sec*1000.0 + s.tv_usec / 1000.0;
-    printf("Seconds: %.6f\n", time_ms/1000);
-    printf("Problem Size: %d\n", N);
-    printf("MFLOPS: %.3f\n", 2*N*N*N/(time_ms*1000));
-    
+    singleRun(1);
     return 0;
 }
-
-
-
-
 
