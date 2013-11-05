@@ -1,7 +1,11 @@
 #!/usr/bin/env python
 
-# Solve the missionary-cannibal-problem by searching
-# We use depth-first search
+# Solve the missionary-cannibal-problem by using depth-first search.
+
+# The state is represented as a 3-dim vector [m,c,b], describing the number of 
+# objects ([m]issionaries, [c]annibals, [b]oat) on side A of the river. The 
+# state of the other side is always given as [3,3,1]-[m,c,b]. Starting state is
+# [3,3,1], goal state is [0,0,0].
 
 class Node:
 
@@ -28,9 +32,11 @@ class Node:
         print(self.state)
 
 def getAllowedStates(state):
-    # get the states that are
-    #   a) reachable (can be reached in one boat crossing)
-    #   b) allowed (don't lead to a massacre)
+    '''
+    get the states that are
+      a) reachable (can be reached in one boat crossing)
+      b) allowed (don't lead to a massacre)
+    '''
     m = state[0]
     c = state[1]
     b = state[2]
@@ -46,10 +52,12 @@ def getAllowedStates(state):
     return [s for s in newStates if doesNotLeadToMassacre(s)]
 
 def doesNotLeadToMassacre(state):
-    # a state does not lead to a massacre if the missionaries are not
-    # outnumbered by the cannibals on either side
-    # (we also check if the numbers add up, but checkValidState would have been
-    # a boring function name)
+    '''
+    a state does not lead to a massacre if the missionaries are not
+    outnumbered by the cannibals on either side
+    (we also check if the numbers add up, but checkValidState would have been
+    a boring function name)
+    '''
     m = state[0]
     c = state[1]
 
@@ -57,6 +65,10 @@ def doesNotLeadToMassacre(state):
         and m>=0 and m<=3 and c>=0 and c<= 3
 
 def dfsearch(initial_state, goal_state):
+    '''
+    apply depth-first search to reach the goal_state fro mthe initial_state
+    '''
+    
     # initialize stuff
     goal = Node(goal_state)
     nodes = [Node(initial_state)]
@@ -88,7 +100,4 @@ def dfsearch(initial_state, goal_state):
 
 if __name__ == "__main__":
     dfsearch([3,3,1], [0,0,0])
-
-
-
 
