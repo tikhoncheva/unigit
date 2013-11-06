@@ -1,72 +1,5 @@
-#include <iostream>
-#include <vector>
-#include <cstdlib>
-#include <sys/time.h>
-#include <sys/resource.h>
 #include <stdio.h>
-
-#define TILE_SIZE 4
-
-typedef std::vector<std::vector<double> > Matrix;
-
-inline double timevalToSeconds(const struct timeval &t)
-{
-    return t.tv_sec + t.tv_usec / 1000000.0;
-}
-    
-
-/* keeps track of time, no security checks */
-class MyTimer
-{
-public:
-
-    MyTimer()
-    {
-        this->reset();
-    }
-
-    void reset() 
-    {
-        this->fill();
-        this->old_tv = this->tv;
-    }
-    
-    double getSeconds()
-    {
-        this->fill();
-        return timevalToSeconds(this->tv) - timevalToSeconds(this->old_tv);
-    }
-
-private:
-
-    struct timeval tv, old_tv;
-
-    void fill()
-    {
-        struct rusage usage;
-        if (getrusage(RUSAGE_SELF, &usage))
-            exit(1);
-        this->tv = usage.ru_utime;
-    }
-};
-
-void fill(Matrix &A, int n, int random=0)
-{
-    for (int i=0; i<n; i++)
-    {
-        // memory leak! Just for demo.
-        std::vector<double> *b = new std::vector<double>;
-        A.push_back(*b);
-        for(int j=0; j<n; j++)
-        {
-            if (random)
-                A[i].push_back((double) rand()/(double)RAND_MAX);
-            else
-                A[i].push_back(0);
-        }
-    }
-}
-
+#include "4.hpp"
 
 /* 
  * Matrix-Matrix-Multiplication
@@ -125,13 +58,10 @@ void tiledMult(const Matrix &A, const Matrix &B, Matrix &C, int n)
 }
 
 
-void singleRun(unsigned char tiled)
+double singleRunMMM(unsigned int n, unsigned char tiled)
 {
-    double time_s;
     Matrix A, B, C;
     MyTimer t;
-    
-    int n = 512;
     
     fill(A,n,1);
     fill(B,n,1);
@@ -142,16 +72,45 @@ void singleRun(unsigned char tiled)
         mult(A, B, C, n);
     else
         tiledMult(A, B, C, n);
-    time_s = t.getSeconds();
-    
-    printf("Seconds: %.6f\n", time_s);
-    printf("Problem Size: %d\n", n);
-    printf("MFLOPS: %.3f\n", 2*n*n*n/(time_s*1e6));
+    return t.getSeconds();
+}
+
+void analyzeMMM(uint32 min_size, uint32 step_size, uint32 max_size)
+{
+    double t;
+    for(unsigned int i = min_size; i<=max_size; i+=step_size)
+    {
+        t = (2.0*i*i*i/(1000000.0))/singleRunMMM(i, 0);
+        printf("%u, %3f;\n", i, t); 
+    }
 }
 
 int main(int argc, char** argv)
 {
-    singleRun(1);
+    analyzeMMM(32,32,512);
     return 0;
+}
+
+
+
+/*
+ * BORING STUFF
+ */
+ 
+void fill(Matrix &A, int n, int random)
+{
+    for (int i=0; i<n; i++)
+    {
+        // memory leak! Just for demo.
+        std::vector<double> *b = new std::vector<double>;
+        A.push_back(*b);
+        for(int j=0; j<n; j++)
+        {
+            if (random)
+                A[i].push_back((double) rand()/(double)RAND_MAX);
+            else
+                A[i].push_back(0);
+        }
+    }
 }
 
