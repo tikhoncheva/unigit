@@ -50,23 +50,19 @@ Außerdem muss \lstinline!result! auf \lstinline!0! initialisiert werden, und da
 \newpage
 \section{Messen von MFLOPS}
 Die C++-Programme für diese Aufgabe befinden sich im Anhang.
-\subsection{}
-Vgl. Abbildung \ref{fig:mflops}.
 \begin{figure}[ht]
 \centering
- \includegraphics[width=.65\linewidth]{mflops.png}
- \caption{MFLOPS über Problemgröße. }
+ \includegraphics[width=.85\linewidth]{mflops.png}
+ \caption{MFLOPS über Problemgröße. Die Rechenleistung bei der Matrix-Matrix-Multiplikation nimmt sehr schnell ab, was sich vermutlich durch die ineffiziente Cache-Nutzung erklärt (vgl. Übungsblatt 1). 
+ Beim Gauß-Seidel-Verfahren bleiben die FLOPS proportional zur Problemgröße, da es quasi lokal arbeitet.}
  \label{fig:mflops}
 \end{figure}
-
-
-\setcounter{subsection}{2}
-\subsection{}
-Vgl. Abbildung \ref{fig:tiled}.
 \begin{figure}[ht]
 \centering
- \includegraphics[width=.65\linewidth]{tiled.png}
- \caption{MFLOPS über Kachelgröße. }
+ \includegraphics[width=.85\linewidth]{tiled.png}
+ \caption{MFLOPS über Kachelgröße. Bei Kacheln der Breite $n=32$ ist ein klarer Peak zu erkennen, da mit dieser Kachelgröße alle 3 Kacheln (A, B, C) gleichzeitig in den L1-Cache (65kB) des Rechners passen. 
+ Das anschließende Plateau bei $n=64$ bzw. $n=128$ repräsentiert die Kachelgrößen, die in den L2-Cache (512kB) passen. Danach nimmt die Leistung wie zu erwarten weiter ab. Ein weiterer Peak wäre wegen der 
+ Cache-Line-Größe bei $n=8$ zu erwarten, dieser wird aber wahrscheinlich durch den Schleifenoverhead gedrückt. Kleinere Kacheln sind offensichtlich ungeeignet, da sie den gegenteiligen Effekt (mehr Cachetraffic) erzeugen.}
  \label{fig:tiled}
 \end{figure}
 

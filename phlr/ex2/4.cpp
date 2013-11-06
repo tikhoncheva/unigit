@@ -121,7 +121,7 @@ int main(int argc, char** argv)
     
     //analyzeTiledMMM(2048, 1, 2, 1024);
     
-    analyzeGS(1000, 512, 32, 2048);
+    analyzeGS(1000, 2048, 128, 4096);
     return 0;
 }
 
