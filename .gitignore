@@ -1,8 +1,12 @@
 *.log
 *.aux
+*.bbl
+*.blg
+*.lof
 *.toc
 *.pdf
 *backup
+*bak
 *swp
 *~
 *pyc

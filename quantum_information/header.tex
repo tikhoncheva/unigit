@@ -1,0 +1,160 @@
+\pagestyle{empty}
+\usepackage[utf8]{inputenc}
+%\usepackage{ngerman}
+%\usepackage[ngerman]{babel}
+\usepackage[babel,german=quotes]{csquotes}
+%\usepackage{exscale}
+%\usepackage{dsfont}
+%\usepackage{latexsym}
+%\usepackage{theorem}   % change theoremstyle
+%\usepackage[dvips]{color}
+
+
+\usepackage{graphicx}
+\usepackage{subfigure} 
+\usepackage[singlelinecheck=true]{caption} % working out of ~
+\usepackage{color}
+% \usepackage{booktabs}
+\usepackage{enumerate}
+\usepackage{textcomp}
+\usepackage{xparse}
+
+
+
+\usepackage{amsmath}
+\allowdisplaybreaks[1]
+\usepackage{colonequals}
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{bbm}
+\usepackage{braket}
+
+
+\usepackage[plainpages=false]{hyperref}
+\definecolor{darkblue}{rgb}{0,0,.5}
+\hypersetup{colorlinks=true, breaklinks=true, linkcolor=darkblue, 
+menucolor=darkblue, urlcolor=darkblue}
+
+\usepackage{setspace}
+
+
+%==============================================================================
+% theorem stuff
+%\theoremstyle{break}  % add line break after theorem header
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{cor}[thm]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[thm]{Definition}
+
+% \newtheorem{satz}{Satz}[section]
+% \newtheorem{lemma}[satz]{Lemma}
+% \newtheorem{korollar}[satz]{Korollar}
+% 
+% \newtheorem{bsp}[satz]{Beispiel}
+% \newtheorem{bem}[satz]{Bemerkung}
+% \newtheorem{folgerung}[satz]{Folgerung}
+
+% \newcommand*\defnpenalties{%
+%   % Geklaut aus einem Posting von Michael Downes:
+%   % > Set \clubpenalty, etc. to distinctive values for use
+%   % > in tracing page breaks. These values are chosen so that
+%   % > no single penalty will absolutely prohibit a page break,
+%   % > but certain combinations of two or more will.
+%   %
+%   \clubpenalty=9996 \widowpenalty=9999 \brokenpenalty=4991
+%   %
+%   % > Reiterate the default value of \predisplaypenalty, for
+%   % > completeness.
+%   % >
+%   % > Set postdisplaypenalty to a fairly high value to discourage
+%   % > a page break between a display and a widow line at the end
+%   % > of a paragraph.
+%   %
+%   \predisplaypenalty=10000 \postdisplaypenalty=1549
+%   %
+%   % > And then \displaywidowpenalty should be at least as high as
+%   % > \postdisplaypenalty, otherwise in a situation where two
+%   % > displays are separated by two lines, TeX will prefer to
+%   % > break between the two lines, rather than before the first
+%   % > line.
+%   %
+%   \displaywidowpenalty=1602
+% }%
+% 
+% \let\sdef\definition
+% \renewcommand{\def}{\defnpenalties\sdef}
+% \let\sthm\thm
+% \renewcommand{\thm}{\defnpenalties\sthm}
+% \let\scor\cor
+% \renewcommand{\cor}{\defnpenalties\scor}
+
+%==============================================================================
+% counter stuff
+\renewcommand{\thefigure}{\thesection.\arabic{figure}}
+\renewcommand{\theequation}{\thesection.\arabic{equation}}
+\renewcommand{\thetable}{\thesection.\arabic{table}}
+
+\newcommand{\resetsectioncounters}{%
+\setcounter{figure}{0}%
+\setcounter{table}{0}%
+\setcounter{equation}{0}%
+}
+
+
+
+
+%==============================================================================
+% my commands
+
+\newcommand{\R}{\mathbb{R}} % real numbers
+\newcommand{\N}{\mathbb{N}} % natural numbers
+\newcommand{\C}{\mathbb{C}} % complex numbers
+\renewcommand{\P}{\mathbb{P}}
+\newcommand{\ind}{\mathbbm{1}}
+\newcommand{\E}{\mathbb{E}}
+\NewDocumentCommand\cmat{mg}{%
+    \ensuremath{\C^{#1\times \IfNoValueTF{#2}{#1}{#2}}}%
+}
+\newcommand{\ugroup}[1]{U(#1)}
+\newcommand{\urep}[1]{U_{#1}}
+
+
+\newcommand{\needcite}{\textcolor{red}{[citation needed]}}
+\newcommand{\needref}{\textcolor{red}{[local reference needed]}}
+\newcommand{\needproof}{\textcolor{red}{[proof needed]}}
+\newcommand{\todo}{\textcolor{red}{\Large[TODO]}}
+
+\newcommand{\eps}{\varepsilon}
+\renewcommand{\phi}{\varphi}
+\newcommand{\Id}{\ \mathrm{d}}
+
+\newcommand{\figref}[1]{(\ref{#1}, p. \pageref{#1})}
+
+
+%==============================================================================
+% my environments
+
+\newenvironment{beweis}{\begin{proof}[Beweis]\defnpenalties}{\end{proof}}
+
+%==============================================================================
+%global settings
+%\pagestyle{headings}
+
+%\usepackage{a4wide}
+%\usepackage{fullpage}
+\pagestyle{plain}
+
+
+\setcounter{tocdepth}{2}
+
+\hyphenation{Zu-falls-stich-pro-be Zu-falls-stich-pro-ben Kon-fi-denz-wert Kon-fi-denz-wer-ten Kon-fi-denz-in-ter-vall}
+
+
+%==============================================================================
+% my settings
+
+
+
+

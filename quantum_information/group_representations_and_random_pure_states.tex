@@ -1,0 +1,134 @@
+\documentclass[a4paper,11pt, BCOR=4mm, DIV=12, pagesize]{scrartcl}
+
+
+\thispagestyle{empty}
+\input{header}
+
+\onehalfspacing
+\KOMAoptions{DIV=last}
+
+\begin{document}
+    \input{title}
+%\cleardoublepage
+% \clearpage
+% \pagenumbering{Roman}
+
+	%\addcontentsline{toc}{chapter}{Inhalt}
+% \begin{spacing}{1}
+%     \tableofcontents
+% 	\addcontentsline{toc}{section}{Inhaltsverzeichnis}
+% 	\cleardoublepage  
+%    \listoffigures
+% 	\addcontentsline{toc}{section}{Abbildungsverzeichnis}
+% 	\cleardoublepage  
+% %     \listoftables
+% % 	\addcontentsline{toc}{section}{Tabellenverzeichnis}
+% % 	\cleardoublepage  
+% \end{spacing}
+
+
+\pagenumbering{arabic}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ACTUAL SEMINAR STUFF
+\section{Preface}
+
+This is the written report corresponding to my talk in the seminar 
+\emph{Selected topics in Mathematical Physics: Quantum information theory}. The 
+seminar was lead by Prof. Dr. Manfred Salmhofer, executive director of the 
+Institute for Theoretical Physics at the University of Heidelberg, and Dr. 
+Markus M\"uller, junior research group leader at that institute. 
+
+The talk starts with a review of some properties of pure quantum states, 
+unitary matrices and density matrices, followed by the introduction of group 
+representations and the Haar measure. The final result will be the proof of 
+Schur's Lemma and its use for calculating expectation values of random pure 
+states.
+
+\section{Basics}
+
+\section{The Haar Measure}
+
+\section{Group Representations}
+\begin{thm}(Representation as Direct Sum of invariant 
+subspaces)\label{thm:directsum}\\
+ bla
+\end{thm}
+
+\section{Schur's Lemma}
+
+\begin{thm}(Schur's Lemma for unitary representations)\\
+ Let
+ \begin{align*}
+  r: G&\to \ugroup{n}\\
+  g&\mapsto \urep{g}
+ \end{align*}
+ be an irreducible unitary 
+ representation of the group $G$. If $A\in\cmat{n}$ commutes with  $\urep{g}$ 
+ for all $g\in G$, then A is a scalar matrix, i.e. 
+ \begin{equation*}
+  A = \lambda \ind_n,\ \lambda\in\C.
+ \end{equation*}
+\end{thm}
+\begin{proof}
+ We can state the commutativity of A as 
+ \begin{equation*}
+  A\urep{g} = \urep{g}A\quad \forall g\in G.
+ \end{equation*}
+ Let $\lambda\in\C$ be an eigenvalue of A and $\ket{v}\in\C^n\setminus\Set{ 0 
+}$ be  an eigenvector to this  eigenvalue, i.e. $A\ket{v} = \lambda\ket{v}$. 
+Then 
+ \begin{equation*}
+  A\urep{g}\ket{v} = \urep{g}A\ket{v} = \lambda\urep{g}\ket{v},
+ \end{equation*}
+ and thus $\urep{g}\ket{v}$ is as well an eigenvector to the eigenvalue 
+ $\lambda$. This holds for all $\urep{g}$, and therefore the eigenspace 
+ $S_\lambda = \left\{\ket{v}\in\C^n: A\ket{v} = \lambda\ket{v} \right\}$ is 
+ an invariant subspace under the unitary representation $r$. The representation 
+ is irreducible, so by theorem \ref{thm:directsum} either $S_\lambda = \{0\}$ 
+ or $S_\lambda = \C^n$ holds. Since $0\neq\ket{v}\in S_\lambda$, we get 
+$S_\lambda  = \C^n$. This means that $\lambda$ is the only eigenvalue of $A$, 
+and we can  write for some orthonormal base $\left\{\ket{u_i}, 1\leq i\leq 
+n\right\}$ of $\C^n$:
+ \begin{equation*}
+  A = \sum\limits_{i=1}^n \lambda \ket{u_i} \bra{u_i} = \lambda\ind_n
+ \end{equation*}
+
+
+
+
+
+
+\end{proof}
+
+
+
+\section{Conclusion and Outlook}
+We have shown \todo. Next talk will be about \todo.
+
+\newpage
+\section{BBB}
+\cite{hansbla}
+\begin{figure}[ht]
+ \caption[short random description]{blub} 
+ \label{fig:42}
+\end{figure}
+
+
+
+% THATS IT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\cleardoublepage
+% \clearpage
+
+\begin{spacing}{1}
+\bibliography{lit}{}
+\bibliographystyle{alphadin}
+% \clearpage
+\listoffigures
+\end{spacing}
+
+\end{document}
+
+
