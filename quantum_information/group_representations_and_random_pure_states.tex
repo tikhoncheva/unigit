@@ -45,11 +45,66 @@ representations and the Haar measure. The final result will be the proof of
 Schur's Lemma and its use for calculating expectation values of random pure 
 states.
 
-\section{Basics}
+\section{Motivation}
 
-\section{The Haar Measure}
+In fields like statistical dynamics or chaos theory, we use probabilistic 
+models to come to conclusions about the state and the evolution of a system. 
+If we want to apply quantum theory to these fields, it would be helpful to 
+know whether a state whose classical analog is chaotic is effectively random 
+\cite{wootters}. 
 
-\section{Group Representations}
+For the definition of a \emph{random quantum state} we need at least a 
+probability measure on the set of quantum states. It turns out that the 
+\emph{Haar measure} can be seen as a probability measure, and that 
+some results of group representation theory allow us to calculate some results 
+for random quantum states. 
+
+In this seminar talk, we will start with some basics on the unitary group, then 
+we will introduce the Haar measure as a probability measure on the unitary 
+group, and we will close with the calculation of expectation values of random 
+pure states:
+\begin{equation}
+\E(\ket{\psi}) = \int_{\ugroup{n}} \ket{\psi}\Id |\psi\rangle.
+\end{equation}
+
+\section{The Unitary Group}
+Basics...
+
+\section{The Haar Integral}
+
+\begin{definition}\label{def:integral} (positive integral)\\
+ An integral $\mu$ is a linear functional from the space 
+ \begin{equation*}
+ \Cont_+(G) = \Set{f: G\to\R| f(g)\geq 0, g\text{ continuous}} 
+ \end{equation*}
+ to the non-negative real numbers. The 
+integral is called \emph{positive}, if for all $f$ with compact support 
+$\mu(f)>0$.
+\end{definition}
+
+\begin{notation} (integral notation)\\
+  If $\mu$ is an integral, we write
+  \begin{equation}
+   \mu(f) =: \int\limits_G f(x)\Id\mu(x)
+  \end{equation}
+  for a continuous non-negative function $f$ like in definition 
+  \ref{def:integral}. 
+  
+  Sometimes we also want to refer to \emph{volumes} of subsets of $G$. We abuse 
+the notation and define the measure $\mu$ associated with this integral as \todo
+  \begin{equation}
+   \mu(A) := \int\limits_G \Xi(x)\Id\mu(x)
+  \end{equation}
+  for a borel set $A\subseteq G$.
+\end{notation}
+
+\begin{thm} (Haar, see \cite{haar})
+ On every locally compact group $G$ exists at least one 
+\end{thm}
+
+
+
+\section{Unitary Group Representations}
 \begin{thm}(Representation as Direct Sum of invariant 
 subspaces)\label{thm:directsum}\\
  bla
@@ -108,7 +163,8 @@ We have shown \todo. Next talk will be about \todo.
 
 \newpage
 \section{BBB}
-\cite{hansbla}
+\cite{rep}
+\cite{haar}
 \begin{figure}[ht]
  \caption[short random description]{blub} 
  \label{fig:42}
