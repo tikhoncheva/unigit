@@ -2,7 +2,7 @@
 \usepackage[utf8]{inputenc}
 %\usepackage{ngerman}
 %\usepackage[ngerman]{babel}
-\usepackage[babel,german=quotes]{csquotes}
+%\usepackage[babel,german=quotes]{csquotes}
 %\usepackage{exscale}
 %\usepackage{dsfont}
 %\usepackage{latexsym}
@@ -45,6 +45,7 @@ menucolor=darkblue, urlcolor=darkblue}
 %\theoremstyle{break}  % add line break after theorem header
 \newtheorem{thm}{Theorem}[section]
 \newtheorem{cor}[thm]{Corollary}
+\newtheorem{prop}[thm]{Proposition}
 \theoremstyle{definition}
 \newtheorem{definition}[thm]{Definition}
 \newtheorem{notation}[thm]{Notation}
@@ -121,7 +122,8 @@ menucolor=darkblue, urlcolor=darkblue}
     \ensuremath{\C^{#1\times \IfNoValueTF{#2}{#1}{#2}}}%
 }
 \newcommand{\ugroup}[1]{U(#1)}
-\newcommand{\urep}[1]{U_{#1}}
+\newcommand{\urep}[1]{\ensuremath{U_{#1}}}
+\newcommand{\summe}[3]{\ensuremath{\sum\limits_{#1=#2}^{#3}}}
 
 
 \newcommand{\needcite}{\textcolor{red}{[citation needed]}}
