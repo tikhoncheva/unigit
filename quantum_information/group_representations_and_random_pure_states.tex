@@ -67,45 +67,109 @@ pure states:
 \E(\ket{\psi}) = \int_{\ugroup{n}} \ket{\psi}\Id |\psi\rangle.
 \end{equation}
 
-\section{The Unitary Group}
-Basics...
-
-\section{The Haar Integral}
-
-\begin{definition}\label{def:integral} (positive integral)\\
- An integral $\mu$ is a linear functional from the space 
- \begin{equation*}
- \Cont_+(G) = \Set{f: G\to\R| f(g)\geq 0, g\text{ continuous}} 
- \end{equation*}
- to the non-negative real numbers. The 
-integral is called \emph{positive}, if for all $f$ with compact support 
-$\mu(f)>0$.
-\end{definition}
-
-\begin{notation} (integral notation)\\
-  If $\mu$ is an integral, we write
-  \begin{equation}
-   \mu(f) =: \int\limits_G f(x)\Id\mu(x)
-  \end{equation}
-  for a continuous non-negative function $f$ like in definition 
-  \ref{def:integral}. 
-  
-  Sometimes we also want to refer to \emph{volumes} of subsets of $G$. We abuse 
-the notation and define the measure $\mu$ associated with this integral as 
-  \begin{equation}
-   \mu(A) := \int\limits_G \chi_A(x)\Id\mu(x)
-  \end{equation}
-  for a borel set $A\subseteq G$ and the \emph{characteristic function} $\chi$.
-\end{notation}
-
-\begin{thm} (Haar, see \cite{haar})
- On every locally compact group $G$ exists at least one 
-\end{thm}
-
-
+\section{The Unitary Group}\label{sec:ugroup}
+Basics... \todo
 
 \section{Unitary Group Representations}
-\begin{prop}(compare to \cite{rep}, p.68) \label{thm:directsum}\\
+In this section we will introduce the notion of \emph{group representation} and 
+examine its implications for the statistical properties that we want to 
+analyze. For a more detailed view on the subject, refer to \cite{rep}. Most of 
+the upcoming definitions are analog to the ones given there, but simplified to 
+our use case where possible. 
+
+Lets start with some basic notation conventions and definitions.
+
+\begin{notation}
+ We will use the following naming conventions throughout the next section. Let 
+$V$ be a complex vector space of dimension $0<n<\infty$. Denote the set of maps 
+from $V$ to itself as $\Endos{V}$ (endomorphisms on $V$) and the invertible 
+endomorphisms on $V$ as $\Autos{V}$ (automorphisms on $V$).
+\end{notation}
+
+\begin{definition}(groups and group homomorphisms)\label{def:group}\\
+ A group $(G,\cdot)$ is a set $G$ combined with a multiplication operator that 
+fulfills the following axioms: 
+\begin{description}
+ \item[Closure] $\forall g,h\in G:\ g\cdot h\in G$
+ \item[Associativity] $\forall g,h,i\in G:\ (g\cdot h)\cdot i = g\cdot (h\cdot 
+i)$
+ \item[Existence of Identity] $\exists e\in G\ \forall g\in G:\ g\cdot e = 
+e\cdot g = g$
+ \item[Existence of Inverse] $\forall g\in G\ \exists g^{-1}\in G:\ g\cdot 
+g^{-1} = e$
+\end{description}
+A group homomorphism is a map between two groups $(G,\cdot), (H,\circ)$ that 
+preserves the group structure, i.e.
+\begin{align*}
+ f:\quad G&\to H\\
+ g &\mapsto f(g)\\
+ \forall u,v\in G:\quad f(u\cdot v) &= f(u)\circ f(v)\\
+ f(u^{-1}) &= f(u)^{-1}
+\end{align*}
+
+\end{definition}
+
+\begin{example}
+ The unitary group $\ugroup{n}$ is a group with identity element $\ind$ and 
+inverse elements $U^{-1} = U^\dagger$.
+\end{example}
+
+\begin{definition}(group representation, $G$-module)\label{def:gmod}\\
+ A group homomorphism
+ \begin{align}\begin{split}
+  \urep{(\cdot)}:\quad G&\to \Autos{V}\\
+  g&\mapsto \urep{g}
+  \end{split}
+ \end{align}
+ is called a \emph{group representation} on $V$, and $V$ is then referred to as 
+a $G$-module. If $\urep{g}\in\ugroup{n}\ \forall g\in G$, we call $U$ a 
+\emph{unitary group representation}. If $\urep{(\cdot)}$ is bijective, the 
+representation is called \emph{faithful}.
+\end{definition}
+
+We want to use only unitary representations in this section, but most results 
+also apply to general representations as well, because every group 
+representation can be seen as a unitary representation with respect to some 
+specific inner product (see \cite{rep}, p. 68f, for details).
+
+\begin{definition}($G$-submodule, irreducibility)\label{def:irred}\\
+ Let $\urep{g}$ be a unitary group representation of group $G$ on $V$. A 
+subspace $V_1\subseteq V$ is called invariant (under the group action), if 
+\begin{equation}
+ \forall g\in G, \ket{v}\in V_1:\ U_g\ket{v}\in V_1.
+\end{equation}
+An invariant subspace $V_1$ of $V$ is also called a $G$-submodule of $V$.
+
+If the only $G$-submodules of $V$ are $V$ and $\{0\}$, we call $V$ an 
+irreducible $G$-module and $\urep{g}$ an \emph{irreducible representation}. 
+Otherwise, we call both \emph{reducible}. $G$-submodules that are not trivial 
+(i.e. $\{0\}$ or $V$) are called \emph{proper $G$-submodules}. 
+\end{definition}
+
+\begin{example}\ \\
+ Consider the unitary representation 
+ \begin{align*}
+  \urep{(\cdot)}: \ugroup{n} &\to \Autos{\C^n\otimes\C^n}\\
+  U&\mapsto U\otimes U.
+ \end{align*}
+ It is a reducible representation with the irreducible invariant subspaces 
+ \begin{align*}
+  \C^n_{\text{sym}} &\coloneqq \left\{\ket{\psi}\in\C^n\otimes\C^n:\  
+\F(\ket{\psi}) = \ket{\psi}\right\}\\
+  \C^n_{\text{antisym}} &\coloneqq \left\{\ket{\psi}\in\C^n\otimes\C^n: 
+\F(\ket{\psi}) = -\ket{\psi}\right\},
+ \end{align*}
+ where $\F$ denotes the flip operator:
+ \begin{equation}
+  \F(\ket{\phi}\otimes\ket{\psi}) = \ket{\psi}\otimes \ket{\phi}
+ \end{equation}
+
+\end{example}
+\begin{proof}
+\todo Example Flip-Operator 
+\end{proof}
+
+\begin{prop}\ \label{thm:directsum}\\
  Let $\urep{g}$ be a group representation of the group $G$ on the $G$-module 
 $V$.  
 \begin{enumerate}\renewcommand{\labelenumi}{(\alph{enumi})}
@@ -113,6 +177,8 @@ $V$.
   $V_2\perp V_1$ with $V = V_1 \oplus V_2$. 
 \item The $G$-module $V$ is the direct sum of irreducible, pairwise orthogonal 
   $G$-submodules.
+  \item The decomposition of $V$ into orthogonal irreducible $G$-submodules is 
+unique.
 \end{enumerate}
 \end{prop}
 \begin{proof}
@@ -144,6 +210,14 @@ therefore a $G$-submodule of $V$.
 
 The second part of the proposition is easily shown by induction: apply 
 the arguments given here on the $G$-submodules $V_1$ and $V_2$ recursively.
+
+The uniqueness is also a simple conclusion. Assume there are two distinct sets 
+of irreducible $G$-submodules $V_1,\ldots,V_k$ and $W_1,\ldots,W_m$. Then 
+(without loss of generality, just reordered) $V_1\cap W_1\supsetneq\{0\}$, 
+$V_1\neq W_1$ and $W_1\supsetneq V_1\cap W_1$. Let $\ket{v}\in V_1\cap 
+W_1\setminus\{0\}$, then by definition \ref{def:irred} $U_g\ket{v}\in V_1$ and 
+$U_g\ket{v}\in W_1$ and thus $U_g\ket{v}\in V_1\cap W_1$. This means that 
+$V_1\cap W_1$ is a proper $G$-submodule of $W_1$, which is a contradiction.
 \end{proof}
 
 This proposition also provides us with some insight about the structure of 
@@ -152,33 +226,37 @@ the representation matrices are in fact block diagonal matrices with respect to
 the chosen orthonormal base, and therefore to any orthonormal base constructed 
 from bases of the irreducible submodules.
 
-
-\section{Schur's Lemma}
-In most of the literature  available, Schur's lemma is stated in terms of 
+The following result, Schur's Lemma, is a key ingredient for calculating 
+statistical properties of random states, like the expectation value. In most of 
+the literature  available, Schur's lemma is stated in terms of 
 morphisms between $G$-modules, but we will use a less general version in 
 terms of matrices, because it is sufficient for the calculation of the 
 properties that we are interested in. 
-\begin{thm}(Schur's Lemma for unitary representations)\\
- Let
- \begin{align*}
-  r: G&\to \ugroup{n}\\
-  g&\mapsto \urep{g}
- \end{align*}
- be an irreducible unitary 
- representation of the group $G$ on the complex vector space $V$. If an 
-endomorphism $A$ on $V$ commutes with  $\urep{g}$ 
- for all $g\in G$, then A is a scalar matrix, i.e. 
+
+\begin{lemma}(Issai Schur 1905)\label{lemma:schur}\\
+Let $\urep{g}$ be a unitary 
+ representation of the group $G$ on the complex vector space $V$. If a 
+ diagonalizable matrix $A$ commutes with  $\urep{g}$ 
+ for all $g\in G$, then A can be written as a linear combination of the 
+projectors onto the invariant subspaces of $V$, i.e. 
  \begin{equation}
-  A = \lambda \ind_n,\ \lambda\in\C.
+  A = \summe{i}{1}{m} \lambda_i \pi_i,
  \end{equation}
-\end{thm}
+ with $\lambda_i\in\C$ and 
+ \begin{equation}
+  \pi_i \coloneqq \sum\limits_{j\in I_i} \ket{u_j}\bra{u_j}
+ \end{equation}
+ for an orthonormal base $\left\{\ket{u_j}:\ j\in I_i\subseteq 
+\left\{1,\ldots,n\right\}\right\}$ of $V_i$ as in proposition 
+\ref{thm:directsum}.
+\end{lemma}
 \begin{proof}
- We can state the commutativity of A as 
+ We can state the commutativity of $A$ as 
  \begin{equation*}
   A\urep{g} = \urep{g}A\quad \forall g\in G.
  \end{equation*}
  Let $\ket{v}\in\C^n\setminus\{0\}$ be  
-an eigenvector of A and $\lambda\in\C$ be an eigenvalue to this eigenvector, 
+an eigenvector of $A$ and $\lambda\in\C$ be an eigenvalue to this eigenvector, 
 i.e. $A\ket{v} = \lambda\ket{v}$. 
 Then 
  \begin{equation*}
@@ -187,40 +265,185 @@ Then
  and thus $\urep{g}\ket{v}$ is as well an eigenvector to the eigenvalue 
  $\lambda$. This holds for all $\urep{g}$, and therefore the eigenspace 
  $S_\lambda = \left\{\ket{v}\in v: A\ket{v} = \lambda\ket{v} \right\}$ is 
- an invariant subspace under the unitary representation $r$. The representation 
- is irreducible, so either $S_\lambda = \{0\}$ 
- or $S_\lambda = V$ holds by definition. Since $0\neq\ket{v}\in S_\lambda$, 
-we get 
-$S_\lambda  = V$. This means that $\lambda$ is the only eigenvalue of $A$, 
-and we can  write for some orthonormal base $\left\{\ket{u_i}, 1\leq i\leq 
-n\right\}$ of $\C^n$:
- \begin{equation*}
-  A = \summe{i}{1}{n} \lambda \ket{u_i} \bra{u_i} = \lambda\ind_n
- \end{equation*}
+ an invariant subspace under the unitary representation $\urep{g}$. By 
+proposition \ref{thm:directsum}, the partition of $V$ into irreducible 
+subspaces is unique, so $S_\lambda = \bigoplus_{i\in I_\lambda} V_i$, 
+with $G$-submodules $V_i$ of $V$ and some (non-empty) index set $I_\lambda$. 
+The matrix $A$ is diagonalizable, so $\bigoplus_{\lambda\in\sigma(A)} 
+S_\lambda = V$. As previously shown in proposition \ref{thm:directsum}, we can 
+choose the orthonormal base $\left\{\ket{u_i}:\ 1\leq i\leq n\right\}$ of $V$ 
+such that it contains orthonormal bases for all irreducible $G$-submodules 
+$V_i$. As we have shown those base vectors are all eigenvectors of $A$, and 
+therefore $V$ has an orthonormal base of eigenvectors of $A$, and thus $A$ is 
+unitarily diagonalizable:
+\begin{equation*}
+ A = \summe{i}{1}{n} \tilde{\lambda}_i \ket{u_i}\bra{u_i} = \summe{j}{1}{m}.
+\lambda_j \pi_j.
+\end{equation*}
+Note that $\lambda_i$ (and obviously $\tilde{\lambda}_i$) are not neccessarily 
+distinct.
+
+\end{proof}
+
+\begin{cor}(Schur's Lemma for irreducible unitary representations)\\
+ Let $\urep{\cdot}$ be an irreducible unitary 
+ representation of the group $G$ on the complex vector space $V$. If a matrix 
+$A$ commutes with  $\urep{g}$ 
+ for all $g\in G$, then A is a scalar matrix, i.e. 
+ \begin{equation}
+  A = \lambda \ind_n,\ \lambda\in\C.
+ \end{equation}
+\end{cor}
+\begin{proof}
+ The matrix $A$ has at least one eigenvector $\ket{v}\in V\setminus\{0\}$ with 
+eigenvalue $\lambda\in\C$. We use the same argument as in lemma 
+\ref{lemma:schur}, and conclude that the eigenspace $S_\lambda$ is an invariant 
+subspace of $V$ with respect to $\urep{g}$. We know that $v\in S_\lambda$, 
+and so by definition \ref{def:irred}, it must be $S_\lambda = V$. Now $\lambda$ 
+is the only eigenvalue of $A$, which means that $A=\lambda\ind_n$.
+\end{proof}
+
+\section{The Haar Integral}
+
+In this section we are going to establish a probability measure on the unitary 
+group. As seen in section \ref{sec:ugroup}, there is a relation of the unitary 
+group of dimension $n$ to the unit sphere in $\R^{2n}$. A probability measure 
+on this sphere could be considered fair, or evenly distributed, if a change of  
+orientation of a set does not change its probability. This would be 
+the case if we take the probability proportional to the spheric area of the 
+set. As it turns out, the Haar measure is equivalent to this notion of a 
+probability distribution on the sphere (see \cite{christensen}).
 
 
+% \begin{definition}\label{def:integral} (positive integral)\\
+%  An integral $\mu$ on a group $G$ is a linear functional from the space 
+%  \begin{equation*}
+%  \Cont_+(G) = \Set{f: G\to\R| f(g)\geq 0, g\text{ continuous}} 
+%  \end{equation*}
+%  to the non-negative real numbers. The 
+% integral is called \emph{positive}, if for all $f$ with compact support 
+% $\mu(f)>0$. 
+% \end{definition}
+% 
+% \begin{notation} (integrals and measures)\\
+%   If $\mu$ is an integral on the group $G$, we write
+%   \begin{equation}
+%    \mu(f) \eqqcolon \int_G f(x)\Id\mu(x)
+%   \end{equation}
+%   for a continuous non-negative function $f$ like in definition 
+%   \ref{def:integral}. 
+%   
+%   Sometimes we also want to refer to \emph{volumes} of subsets of $G$. We abuse 
+% the notation and define the measure $\mu$ associated with the integral of the 
+% same name as 
+%   \begin{equation}
+%    \mu(A) \coloneqq \int\limits_G \chi_A(x)\Id\mu(x)
+%   \end{equation}
+%   for a borel set $A\subseteq G$ and the \emph{characteristic function} $\chi$.
+% \end{notation}
+
+\begin{notation}
+ We will sometimes use the terms measure and integral exchangeable. This is not 
+a problem though, because we can always construct an integral from a given 
+measure, and we get the measure from the integral by setting
+ \begin{equation}
+  \mu(A) \coloneqq \int\limits_G \chi_A(x)\Id\mu(x)
+ \end{equation}
+  for a Borel set $A\subseteq G$ and the \emph{characteristic function} $\chi$.
+ 
+ We also want to introduce a short-hand notation for the translation of sets:
+ \begin{equation}
+  gA = \{gh\in G:\ h\in A\},\quad g\in G,\ A \subseteq G \text{ Borel set}.
+ \end{equation}
+\end{notation}
 
 
+\begin{definition}(positive integral)\\
+An integral $\mu$ is said to be positive, if it is positive for all 
+continuous, $\mu$-integrable functions $f$ with compact support.
+\end{definition}
 
 
+\begin{definition} (left- and right-invariant integrals)\\
+ An integral $\mu$ on the group $G$ is left-invariant, if 
+ \begin{equation}
+  \int_G f(gx)\Id\mu(x) = \int_G f(x)\Id\mu(x)
+ \end{equation}
+ for all $g\in G$ and all $\mu$-integrable functions $f$.
+\end{definition}
+
+We will not prove the following theorem, but we will gladly accept its 
+results.
+\begin{thm} (Alfr\'ed Haar, John von Neumann 1933; see \cite{haar})\\
+ On every locally compact group $G$ exists at least one left-invariant positive 
+integral. If $\mu,\nu$ are both left-invariant positive integrals on $G$, then 
+there is a constant factor $c>0$ such that $\nu = c\mu$.
+\end{thm}
+
+\begin{cor}
+Let $G$ be a compact group.
+\begin{enumerate}\renewcommand{\labelenumi}{(\alph{enumi})}
+ \item Every left-invariant Haar measure on $G$ is also a right-invariant 
+Haar-Measure on $G$. 
+ \item The Haar-measure on $G$ is finite.
+ \end{enumerate}
+\end{cor}
+\begin{proof}
+ Let $\mu$ be a left-invariant measure on $G$ and define the 
+measure $\nu(A)\coloneqq \mu(gA)$ for Borel sets $A$ and some fixed $g\in G$. 
+Then $\nu$ is \todo
 \end{proof}
 
 
 
 \section{Conclusion and Outlook}
-We have shown \todo. Next talk will be about \todo.
+We will conclude this report with an application of Schur's Lemma on random 
+quantum states, as promised. 
 
-\newpage
-\section{BBB}
-\cite{rep}
-\cite{haar}
-\begin{figure}[ht]
- \caption[short random description]{blub} 
- \label{fig:42}
-\end{figure}
+\begin{example}(expectation value of random pure states)\footnote{As you may 
+have noticed, we did not formally define an 
+integral as a map from functions to matrices. We assume at this point that we 
+can use the standard definition of matrix functions, acting on the 
+eigenvalues.}\\
+ We can model a \emph{random pure quantum state} $\rho = \ket{\psi}\bra{\psi}$ 
+as some initial state $\rho_0 = \ket{\psi_0}\bra{\psi_0}$ that is 
+transformed by a (Haar-)random unitary matrix $U$. We get 
+\begin{equation}
+ \E(\rho) = \int \ket{\psi}\bra{\psi}\Id\ket{\psi} = 
+ \int_{\ugroup{n}} U\ket{\psi_0}\bra{\psi_0}U^\dagger\Id\mu(U).
+\end{equation}
+Note that this integral does not depend on the initial state $\rho_0$ because 
+of the left-invariance of the Haar integral.
 
+We see that $\E(\rho)$ is self-adjoint and thus (unitarily) diagonalizable. 
+Furthermore, for any unitary matrix $Q$, we get 
+\begin{align*}
+ Q\E(\rho) &= \int_\ugroup{n} QU\rho U^\dagger\Id\mu(U)\\
+ &= \int_\ugroup{n} W(U)\rho W(U)^\dagger Q\Id\mu(U)\\
+ &= \int_\ugroup{n} W\rho W^\dagger Q\Id\mu(W) = \E(\rho)Q
+\end{align*}
+by substitution $W(U) = QU$ and the left-invariance of the Haar integral. 
+Therefore, all prerequisites for lemma \ref{lemma:schur} are met, and we can 
+write 
+\begin{equation}
+ \E(\rho) = \lambda\ind_n
+\end{equation}
+for some $\lambda\in\C$. The trace operator is linear, so we can exchange the 
+integral and the trace operator and get 
+\begin{equation}
+ n\lambda = \trace(\E(\rho)) = \int_\ugroup{n} 
+U\trace(\ket{\psi_0}\bra{\psi_0})U^\dagger\Id\mu(U) = \int_\ugroup{n}\Id\mu(U) 
+= 1
+\end{equation}
+and this gives us the final result for the expectation value of a random pure 
+state,
+\begin{equation}
+ \E(\rho) = \frac 1 n \ind_n,
+\end{equation}
+the maximally mixed state.
+\end{example}
 
-
+\todo Outlook and other results
 % THATS IT
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -231,7 +454,7 @@ We have shown \todo. Next talk will be about \todo.
 \bibliography{lit}{}
 \bibliographystyle{alphadin}
 % \clearpage
-\listoffigures
+% \listoffigures
 \end{spacing}
 
 \end{document}

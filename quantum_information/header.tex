@@ -30,25 +30,25 @@
 \usepackage{amsfonts}
 \usepackage{bbm}
 \usepackage{braket}
-
+\usepackage{accents}
+\usepackage{setspace}
 
 \usepackage[plainpages=false]{hyperref}
 \definecolor{darkblue}{rgb}{0,0,.5}
 \hypersetup{colorlinks=true, breaklinks=true, linkcolor=darkblue, 
 menucolor=darkblue, urlcolor=darkblue}
-
-\usepackage{setspace}
-
-
+%LAST PACKAGE IS HYPERREF!!
 %==============================================================================
 % theorem stuff
 %\theoremstyle{break}  % add line break after theorem header
 \newtheorem{thm}{Theorem}[section]
 \newtheorem{cor}[thm]{Corollary}
 \newtheorem{prop}[thm]{Proposition}
+\newtheorem{lemma}[thm]{Lemma}
 \theoremstyle{definition}
 \newtheorem{definition}[thm]{Definition}
 \newtheorem{notation}[thm]{Notation}
+\newtheorem{example}[thm]{Example}
 
 % \newtheorem{satz}{Satz}[section]
 % \newtheorem{lemma}[satz]{Lemma}
@@ -114,16 +114,22 @@ menucolor=darkblue, urlcolor=darkblue}
 \newcommand{\N}{\mathbb{N}} % natural numbers
 \newcommand{\C}{\mathbb{C}} % complex numbers
 \renewcommand{\P}{\mathbb{P}}
+\newcommand{\F}{\ensuremath{\mathop{\mathbb{F}}}}
 \newcommand{\ind}{\mathbbm{1}}
-\newcommand{\E}{\mathbb{E}}
+\newcommand{\E}{\ensuremath{\mathop{\mathbb{E}}}}
 \newcommand{\K}{\mathcal{K}}
 \newcommand{\Cont}{\mathcal{C}}
+\newcommand{\trace}{\ensuremath{\mathop{\mathrm{trace}}}}
 \NewDocumentCommand\cmat{mg}{%
     \ensuremath{\C^{#1\times \IfNoValueTF{#2}{#1}{#2}}}%
 }
-\newcommand{\ugroup}[1]{U(#1)}
+\newcommand{\ugroup}[1]{{U(#1)}}
 \newcommand{\urep}[1]{\ensuremath{U_{#1}}}
 \newcommand{\summe}[3]{\ensuremath{\sum\limits_{#1=#2}^{#3}}}
+\newcommand{\biguniondisjoint}{\ensuremath{\mathop{\accentset{\bullet}{\bigcup}}
+}}
+\newcommand{\Autos}[1]{\ensuremath{\mathrm{Aut}(#1)}}
+\newcommand{\Endos}[1]{\ensuremath{\mathrm{End}(#1)}}
 
 
 \newcommand{\needcite}{\textcolor{red}{[citation needed]}}
